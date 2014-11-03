@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+        <display-name>Test tools</display-name>
+    <!--           <context-param>
+                   <description>Vaadin production mode</description>
+                   <param-name>productionMode</param-name>
+                   <param-value>false</param-value>
+               </context-param>
+               -->
+               <servlet>
+                   <servlet-name>MainUI</servlet-name>
+                   <servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
+                   <init-param>
+                       <description>Vaadin application</description>
+                       <param-name>UI</param-name>
+                       <param-value>TestTools.vaadin.MainUI</param-value>
+                   </init-param>
+               </servlet>
+               <servlet-mapping>
+                   <servlet-name>MainUI</servlet-name>
+                   <url-pattern>/*</url-pattern>
+               </servlet-mapping>
+<!--    <servlet>
+        <servlet-name>MainServlet</servlet-name>
+        <servlet-class>TestTools.web.MainServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MainServlet</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>-->
+
+</web-app>
