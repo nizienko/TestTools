@@ -1,5 +1,6 @@
 package TestTools.database.testcase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ public class TestCase {
         return labelId;
     }
 
-    public void setLabelId(List<Integer> labelId) {
+    public void setLabelId(ArrayList<Integer> labelId) {
         this.labelId = labelId;
     }
 
@@ -48,18 +49,18 @@ public class TestCase {
         this.description = description;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
     private Integer testSuiteId;
     private String name;
     private String description;
-    private List<Integer> labelId;
-    private String status;
+    private ArrayList<Integer> labelId;
+    private Integer status;
 
 }
