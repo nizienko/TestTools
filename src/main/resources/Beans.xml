@@ -21,19 +21,11 @@
         <property name="dataSource" ref="datasource"/>
     </bean>
 
-    <bean id="testTableDao" class="TestTools.database.testTable.TestTableDao">
+    <bean id="daoContainer" class="TestTools.database.DaoContainer">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
-    <bean id="projectDao" class="TestTools.database.project.ProjectDao">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    <bean id="notifier" class="TestTools.core.Notifier">
     </bean>
 
-    <bean id="versionDao" class="TestTools.database.version.VersionDao">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
-
-    <bean id="buildDao" class="TestTools.database.build.BuildDao">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
 </beans>

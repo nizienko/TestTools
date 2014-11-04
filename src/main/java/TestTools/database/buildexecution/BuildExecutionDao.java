@@ -2,6 +2,7 @@ package TestTools.database.buildexecution;
 
 import TestTools.database.AbstractDao;
 import TestTools.database.build.Build;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
@@ -9,6 +10,10 @@ import java.util.List;
  * Created by def on 04.11.14.
  */
 public class BuildExecutionDao extends AbstractDao {
+    public BuildExecutionDao(JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate);
+    }
+
     public void createTable() {
         String SQL = "CREATE TABLE IF NOT EXISTS \"buildexecution\" (\n" +
                 "    \"id\" INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -48,5 +53,10 @@ public class BuildExecutionDao extends AbstractDao {
     public void delete(BuildExecution buildExecution) {
         String SQL = "delete from buildexecution where id=?";
         jdbcTemplate.update(SQL, buildExecution.getId());
+    }
+
+    public BuildExecution selectByBuildAndName(Build build, String execution) {
+        String SQL = "select id, build_id, name from buildexecution where build_id=? and name=?;";
+        return jdbcTemplate.queryForObject(SQL, new Object[]{build.getId(), execution}, new BuildExecutionMapper());
     }
 }

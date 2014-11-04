@@ -7,16 +7,14 @@ import java.text.SimpleDateFormat;
 /**
  * Created by def on 29.10.14.
  */
-public abstract class AbstractDao {
+public abstract class AbstractDao implements TableDao {
     protected JdbcTemplate jdbcTemplate;
     // dateformat for sqlite date column
     protected SimpleDateFormat dateFormat;
 
-    public AbstractDao(){
+    public AbstractDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
         this.dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
 
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 }

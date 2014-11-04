@@ -2,6 +2,7 @@ package TestTools.database.testexecution;
 
 import TestTools.database.AbstractDao;
 import TestTools.database.buildexecution.BuildExecution;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
@@ -9,6 +10,11 @@ import java.util.List;
  * Created by def on 03.11.14.
  */
 public class TestExecutionDao extends AbstractDao {
+    public TestExecutionDao(JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate);
+    }
+
+
     public void createTable() {
         String SQL = "CREATE TABLE IF NOT EXISTS \"testexecution\" (\n" +
                 "    \"id\" INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -47,8 +53,13 @@ public class TestExecutionDao extends AbstractDao {
     }
 
     public List<TestExecution> selectByBuildExecution(BuildExecution buildExecution) {
-        String SQL = "select id, testcase_id, status_id, c, execution_dt from testexecution where buildexecution_id=?;";
+        String SQL = "select id, testcase_id, status_id, buildexecution_id, execution_dt from testexecution where buildexecution_id=?;";
         return jdbcTemplate.query(SQL, new Object[]{buildExecution.getId()}, new TestExecutionMapper());
+    }
+
+    public List<TestExecution> selectLast(Integer cnt) {
+        String SQL = "select id, testcase_id, status_id, buildexecution_id, execution_dt from testexecution order by execution_dt desc limit ?;";
+        return jdbcTemplate.query(SQL, new Object[]{cnt}, new TestExecutionMapper());
     }
 
     public void delete(TestExecution testExecution) {

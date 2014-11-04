@@ -1,6 +1,8 @@
 package TestTools.database.build;
 
 import TestTools.database.AbstractDao;
+import TestTools.database.version.Version;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.text.SimpleDateFormat;
 
@@ -9,7 +11,11 @@ import java.text.SimpleDateFormat;
  */
 public class BuildDao extends AbstractDao {
 
-    public void createTable(){
+    public BuildDao(JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate);
+    }
+
+    public void createTable() {
         String SQL = "CREATE TABLE IF NOT EXISTS \"build\" (\n" +
                 "    \"id\" INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    \"version_id\" INTEGER NOT NULL,\n" +
@@ -22,7 +28,7 @@ public class BuildDao extends AbstractDao {
         jdbcTemplate.execute(SQL);
     }
 
-    public void insert(Build build){
+    public void insert(Build build) {
         String SQL = "insert into build " +
                 "(version_id, name, description, given_dt, estimated_dt, finished_dt) " +
                 "values (?, ?, ?, ?, ?, ?)";
@@ -35,4 +41,8 @@ public class BuildDao extends AbstractDao {
                 dateFormat.format(build.getFinishedDt()));
     }
 
+    public Build selectByVersionAndName(Version version, String buildName) {
+        String SQL = "select id, version_id, name, description, given_dt, estimated_dt, finished_dt from build where version_id=? and name=?;";
+        return jdbcTemplate.queryForObject(SQL, new Object[]{version.getId(), buildName}, new BuildMapper());
+    }
 }

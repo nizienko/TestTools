@@ -8,6 +8,15 @@ public class BuildExecution {
     private Integer buildId;
     private String name;
 
+    public BuildExecution() {
+
+    }
+
+    public BuildExecution(Integer buildId, String name) {
+        this.name = name;
+        this.buildId = buildId;
+    }
+
     public Integer getId() {
         return id;
     }

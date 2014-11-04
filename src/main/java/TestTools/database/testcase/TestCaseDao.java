@@ -2,6 +2,7 @@ package TestTools.database.testcase;
 
 import TestTools.database.AbstractDao;
 import TestTools.database.testsuite.TestSuite;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
@@ -9,6 +10,10 @@ import java.util.List;
  * Created by def on 03.11.14.
  */
 public class TestCaseDao extends AbstractDao {
+    public TestCaseDao(JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate);
+    }
+
     public void createTable() {
         String SQL = "CREATE TABLE IF NOT EXISTS \"testcase\" (\n" +
                 "    \"id\" INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
