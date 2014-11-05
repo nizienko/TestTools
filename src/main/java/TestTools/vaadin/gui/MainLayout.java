@@ -13,7 +13,7 @@ public class MainLayout extends VerticalLayout {
 
     public MainLayout() {
         BodyLayout bodyLayout = new BodyLayout();
-        HeadLayout headLayout = new HeadLayout();
+        HeadLayout headLayout = new HeadLayout(bodyLayout);
         this.addComponent(headLayout);
         this.addComponent(bodyLayout);
     }

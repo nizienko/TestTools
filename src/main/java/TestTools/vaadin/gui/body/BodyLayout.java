@@ -1,12 +1,23 @@
 package TestTools.vaadin.gui.body;
 
+import TestTools.database.testexecution.FullTestExecution;
 import com.vaadin.ui.VerticalLayout;
+
+import java.util.List;
 
 /**
  * Created by def on 05.11.14.
  */
 public class BodyLayout extends VerticalLayout {
+    private LatestTestsLayout latestTestsLayout;
+
     public BodyLayout() {
         this.setSizeFull();
+        latestTestsLayout = new LatestTestsLayout();
+        this.addComponent(latestTestsLayout);
+    }
+
+    public void updateLatestTests(List<FullTestExecution> fullTestExecutionList) {
+        latestTestsLayout.updateLatestTests(fullTestExecutionList);
     }
 }
