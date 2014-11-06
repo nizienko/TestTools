@@ -31,7 +31,7 @@ public class HeadLayout extends HorizontalLayout {
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
                 String chosenProject = valueChangeEvent.getProperty().getValue().toString();
                 System.out.println(chosenProject);
-                bodyLayout.updateLatestTests(daoContainer.getFullTestExecutionDao().selectLastByProject(50, chosenProject));
+                bodyLayout.updateLatestTests(daoContainer.getTestExecutionDao().selectLastWithDescriptionByProject(50, chosenProject));
             }
         });
 

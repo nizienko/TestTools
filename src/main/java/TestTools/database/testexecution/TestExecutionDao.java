@@ -32,7 +32,7 @@ public class TestExecutionDao extends AbstractDao {
                 testExecution.getTestCaseId(),
                 testExecution.getStatusId(),
                 testExecution.getBuildExecutionId(),
-                dateFormat.format(testExecution.getExecution_dt())
+                dateFormat.format(testExecution.getExecutionDt())
         );
     }
 
@@ -42,7 +42,7 @@ public class TestExecutionDao extends AbstractDao {
                 testExecution.getTestCaseId(),
                 testExecution.getStatusId(),
                 testExecution.getBuildExecutionId(),
-                dateFormat.format(testExecution.getExecution_dt()),
+                dateFormat.format(testExecution.getExecutionDt()),
                 testExecution.getId()
         );
     }
@@ -65,5 +65,20 @@ public class TestExecutionDao extends AbstractDao {
     public void delete(TestExecution testExecution) {
         String SQL = "delete from testexecution where id=?";
         jdbcTemplate.update(SQL, testExecution.getId());
+    }
+
+    public List<TestExecution> selectLastWithDescription(int i) {
+        String SQL = "select tc.issue issue, tc.name testcase, p.name project, v.name version, b.name build, be.name execution, te.execution_dt dt, te.status_id status \n" +
+                "from testexecution te join buildexecution be on te.buildexecution_id=be.id join build b on be.build_id=b.id join version v on b.version_id=v.id join project p on v.project_id=p.id join testcase tc on te.testcase_id=tc.id\n" +
+                "order by te.execution_dt desc limit ?;";
+        return jdbcTemplate.query(SQL, new Object[]{i}, new TestExecutionWithNamesMapper());
+    }
+
+    public List<TestExecution> selectLastWithDescriptionByProject(int i, String project) {
+        String SQL = "select tc.issue issue, tc.name testcase, p.name project, v.name version, b.name build, be.name execution, te.execution_dt dt, te.status_id status \n" +
+                "from testexecution te join buildexecution be on te.buildexecution_id=be.id join build b on be.build_id=b.id join version v on b.version_id=v.id join project p on v.project_id=p.id join testcase tc on te.testcase_id=tc.id\n" +
+                "where p.name=?\n" +
+                "order by te.execution_dt desc limit ?;";
+        return jdbcTemplate.query(SQL, new Object[]{project, i}, new TestExecutionWithNamesMapper());
     }
 }

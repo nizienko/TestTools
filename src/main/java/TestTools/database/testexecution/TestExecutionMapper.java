@@ -21,7 +21,7 @@ public class TestExecutionMapper extends AbstractMapper implements RowMapper<Tes
             executionDt = dateFormat.parse(resultSet.getString("execution_dt"));
         } catch (Exception e) {
         }
-        testExecution.setExecution_dt(executionDt);
+        testExecution.setExecutionDt(executionDt);
         testExecution.setTestCaseId(resultSet.getInt("testcase_id"));
         testExecution.setStatusId(resultSet.getInt("status_id"));
         return testExecution;

@@ -48,6 +48,11 @@ public class TestSuiteDao extends AbstractDao {
         return jdbcTemplate.query(SQL, new Object[]{project.getId()}, new TestSuiteMapper());
     }
 
+    public TestSuite selectByProjectAndName(Project project, String name) {
+        String SQL = "select id, project_id, testsuitename, description from testsuite where project_id=? and testsuitename=?;";
+        return jdbcTemplate.queryForObject(SQL, new Object[]{project.getId(), name}, new TestSuiteMapper());
+    }
+
     public void delete(TestSuite testSuite) {
         String SQL = "delete from testsuite where id=?";
         jdbcTemplate.update(SQL, testSuite.getId());

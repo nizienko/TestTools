@@ -2,10 +2,9 @@ package TestTools.vaadin.gui.body;
 
 import TestTools.core.MainApp;
 import TestTools.database.DaoContainer;
-import TestTools.database.testexecution.FullTestExecution;
+import TestTools.database.testexecution.TestExecution;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
-import org.omg.CORBA.ARG_IN;
 
 import java.util.List;
 
@@ -21,6 +20,7 @@ public class LatestTestsLayout extends VerticalLayout {
         table.setEditable(false);
         table.setSelectable(true);
         table.setImmediate(true);
+        table.addContainerProperty("Issue", String.class, null);
         table.addContainerProperty("Name", String.class, null);
         table.addContainerProperty("Project", String.class, null);
         table.addContainerProperty("Version", String.class, null);
@@ -29,21 +29,21 @@ public class LatestTestsLayout extends VerticalLayout {
         table.addContainerProperty("Date", String.class, null);
         table.addContainerProperty("Status", String.class, null);
         DaoContainer daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
-        int i = 1;
-        for (FullTestExecution fte : daoContainer.getFullTestExecutionDao().selectLast(50)) {
-            table.addItem(new Object[]{fte.getName(), fte.getPtoject(), fte.getVersion(), fte.getBuild(),
-                    fte.getExecution(), fte.getDate(), fte.getStatus()}, new Integer(i));
-            i++;
-        }
+        updateLatestTests(daoContainer.getTestExecutionDao().selectLastWithDescription(50));
         this.addComponent(table);
+
     }
 
-    public void updateLatestTests(List<FullTestExecution> fullTestExecutionList) {
+    public void updateLatestTests(List<TestExecution> testExecutions) {
         table.removeAllItems();
         int i = 1;
-        for (FullTestExecution fte : fullTestExecutionList) {
-            table.addItem(new Object[]{fte.getName(), fte.getPtoject(), fte.getVersion(), fte.getBuild(),
-                    fte.getExecution(), fte.getDate(), fte.getStatus()}, new Integer(i));
+        for (TestExecution te : testExecutions) {
+            String status = "failed";
+            if (te.getStatusId() == 1) {
+                status = "passed";
+            }
+            table.addItem(new Object[]{te.getTestCaseIssue(), te.getTestCaseName(), te.getPtojectName(), te.getVersionName(), te.getBuildName(),
+                    te.getExecutionName(), te.getExecutionDt().toString(), status}, new Integer(i));
             i++;
         }
     }

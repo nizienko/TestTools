@@ -10,9 +10,15 @@ import java.util.Map;
 public class TestExecution {
     private Integer id;
     private Integer testCaseId;
+    private String testCaseIssue;
     private Integer statusId;
-    private Date execution_dt;
+    private Date executionDt;
     private Integer buildExecutionId;
+    private String testCaseName;
+    private String ptojectName;
+    private String versionName;
+    private String buildName;
+    private String executionName;
 
 
     public TestExecution() {
@@ -23,7 +29,7 @@ public class TestExecution {
         this.testCaseId = testCaseId;
         this.statusId = statusId;
         this.buildExecutionId = buildExecutionId;
-        this.execution_dt = new Date();
+        this.executionDt = new Date();
     }
 
     public Integer getBuildExecutionId() {
@@ -34,6 +40,13 @@ public class TestExecution {
         this.buildExecutionId = buildExecutionId;
     }
 
+    public String getTestCaseIssue() {
+        return testCaseIssue;
+    }
+
+    public void setTestCaseIssue(String testCaseIssue) {
+        this.testCaseIssue = testCaseIssue;
+    }
 
     public Integer getId() {
         return id;
@@ -59,11 +72,51 @@ public class TestExecution {
         this.statusId = statusId;
     }
 
-    public Date getExecution_dt() {
-        return execution_dt;
+    public Date getExecutionDt() {
+        return executionDt;
     }
 
-    public void setExecution_dt(Date execution_dt) {
-        this.execution_dt = execution_dt;
+    public void setExecutionDt(Date execution_dt) {
+        this.executionDt = execution_dt;
+    }
+
+    public String getTestCaseName() {
+        return testCaseName;
+    }
+
+    public void setTestCaseName(String testCaseName) {
+        this.testCaseName = testCaseName;
+    }
+
+    public String getPtojectName() {
+        return ptojectName;
+    }
+
+    public void setPtojectName(String ptojectName) {
+        this.ptojectName = ptojectName;
+    }
+
+    public String getVersionName() {
+        return versionName;
+    }
+
+    public void setVersionName(String versionName) {
+        this.versionName = versionName;
+    }
+
+    public String getBuildName() {
+        return buildName;
+    }
+
+    public void setBuildName(String buildName) {
+        this.buildName = buildName;
+    }
+
+    public String getExecutionName() {
+        return executionName;
+    }
+
+    public void setExecutionName(String executionName) {
+        this.executionName = executionName;
     }
 }

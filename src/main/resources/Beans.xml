@@ -25,6 +25,10 @@
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
+    <bean id="testManager" class="TestTools.testmanager.TestManager">
+        <property name="daoContainer" ref="daoContainer"/>
+    </bean>
+
     <bean id="notifier" class="TestTools.core.Notifier">
     </bean>
 

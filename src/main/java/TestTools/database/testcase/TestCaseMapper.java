@@ -14,6 +14,7 @@ public class TestCaseMapper implements RowMapper<TestCase> {
         TestCase testCase = new TestCase();
         testCase.setId(resultSet.getInt("id"));
         testCase.setTestSuiteId(resultSet.getInt("testsuite_id"));
+        testCase.setIssue(resultSet.getString("issue"));
         testCase.setName(resultSet.getString("name"));
         testCase.setDescription(resultSet.getString("description"));
         testCase.setStatus(resultSet.getInt("status"));

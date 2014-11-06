@@ -57,10 +57,19 @@ public class TestCase {
         this.status = status;
     }
 
+    public String getIssue() {
+        return issue;
+    }
+
+    public void setIssue(String issue) {
+        this.issue = issue;
+    }
+
     private Integer testSuiteId;
     private String name;
     private String description;
     private ArrayList<Integer> labelId;
     private Integer status;
+    private String issue;
 
 }
