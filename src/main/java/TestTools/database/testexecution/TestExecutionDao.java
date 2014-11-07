@@ -2,6 +2,8 @@ package TestTools.database.testexecution;
 
 import TestTools.database.AbstractDao;
 import TestTools.database.buildexecution.BuildExecution;
+import TestTools.database.project.Project;
+import TestTools.database.version.Version;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
@@ -74,11 +76,19 @@ public class TestExecutionDao extends AbstractDao {
         return jdbcTemplate.query(SQL, new Object[]{i}, new TestExecutionWithNamesMapper());
     }
 
-    public List<TestExecution> selectLastWithDescriptionByProject(int i, String project) {
+    public List<TestExecution> selectLastWithDescriptionByProject(int i, Project project) {
         String SQL = "select tc.issue issue, tc.name testcase, p.name project, v.name version, b.name build, be.name execution, te.execution_dt dt, te.status_id status \n" +
                 "from testexecution te join buildexecution be on te.buildexecution_id=be.id join build b on be.build_id=b.id join version v on b.version_id=v.id join project p on v.project_id=p.id join testcase tc on te.testcase_id=tc.id\n" +
-                "where p.name=?\n" +
+                "where p.id=?\n" +
                 "order by te.execution_dt desc limit ?;";
-        return jdbcTemplate.query(SQL, new Object[]{project, i}, new TestExecutionWithNamesMapper());
+        return jdbcTemplate.query(SQL, new Object[]{project.getId(), i}, new TestExecutionWithNamesMapper());
+    }
+
+    public List<TestExecution> selectLastWithDescriptionByVersion(int i, Version version) {
+        String SQL = "select tc.issue issue, tc.name testcase, p.name project, v.name version, b.name build, be.name execution, te.execution_dt dt, te.status_id status \n" +
+                "from testexecution te join buildexecution be on te.buildexecution_id=be.id join build b on be.build_id=b.id join version v on b.version_id=v.id join project p on v.project_id=p.id join testcase tc on te.testcase_id=tc.id\n" +
+                "where p.id=?\n" +
+                "order by te.execution_dt desc limit ?;";
+        return jdbcTemplate.query(SQL, new Object[]{version.getId(), i}, new TestExecutionWithNamesMapper());
     }
 }

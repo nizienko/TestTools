@@ -1,9 +1,7 @@
 package TestTools.rest;
 
 import TestTools.database.testexecution.TestExecution;
-import TestTools.testmanager.TestManagerSomeException;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
@@ -25,10 +23,10 @@ public class AddTestExecution extends RestServlet {
             te = parse(in);
             testManager.addTestExecution(te);
             out.print(buildAnswer("0", "success"));
-        } catch (MissingParameterException e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             out.print(buildAnswer("-1", "parameter missing"));
-        } catch (TestManagerSomeException e) {
+        } catch (IllegalStateException e) {
             e.printStackTrace();
             out.print(buildAnswer("-1", e.getMessage()));
         } catch (Exception e) {
@@ -37,7 +35,7 @@ public class AddTestExecution extends RestServlet {
         }
     }
 
-    private TestExecution parse(Map<String, String[]> parameterMap) throws MissingParameterException {
+    private TestExecution parse(Map<String, String[]> parameterMap) throws IllegalArgumentException {
         TestExecution te = new TestExecution();
         try {
             te.setPtojectName(parameterMap.get("project")[0]);
@@ -49,7 +47,7 @@ public class AddTestExecution extends RestServlet {
             te.setStatusId(Integer.parseInt(parameterMap.get("status")[0]));
         } catch (NullPointerException e) {
             e.printStackTrace();
-            throw new MissingParameterException();
+            throw new IllegalArgumentException();
         }
         return te;
     }

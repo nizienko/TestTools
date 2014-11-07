@@ -29,7 +29,7 @@
         <property name="daoContainer" ref="daoContainer"/>
     </bean>
 
-    <bean id="notifier" class="TestTools.core.Notifier">
+    <bean id="httpNotifier" class="TestTools.httpnotifier.HttpNotifier">
     </bean>
 
 </beans>

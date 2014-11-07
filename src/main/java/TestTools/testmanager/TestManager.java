@@ -22,7 +22,7 @@ public class TestManager {
         this.daoContainer = daoContainer;
     }
 
-    public void addTestExecution(TestExecution te) throws TestManagerSomeException {
+    public void addTestExecution(TestExecution te) throws IllegalStateException {
         try {
             Project project = null;
             try {
@@ -88,7 +88,7 @@ public class TestManager {
             daoContainer.getTestExecutionDao().insert(te);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new TestManagerSomeException("Error inserting test execution");
+            throw new IllegalStateException("Error inserting test execution");
         }
     }
 
