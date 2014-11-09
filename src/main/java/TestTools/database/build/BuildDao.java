@@ -5,6 +5,7 @@ import TestTools.database.version.Version;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Created by def on 30.10.14.
@@ -39,6 +40,11 @@ public class BuildDao extends AbstractDao {
                 dateFormat.format(build.getFinishedDt()),
                 dateFormat.format(build.getEstimatedDt()),
                 dateFormat.format(build.getFinishedDt()));
+    }
+
+    public List<Build> selectByVersion(Version version) {
+        String SQL = "select id, version_id, name, description, given_dt, estimated_dt, finished_dt from build where version_id=?;";
+        return jdbcTemplate.query(SQL, new Object[]{version.getId()}, new BuildMapper());
     }
 
     public Build selectByVersionAndName(Version version, String buildName) {

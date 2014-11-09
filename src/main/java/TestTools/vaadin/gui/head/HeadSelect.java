@@ -7,9 +7,9 @@ import com.vaadin.ui.ListSelect;
  */
 public class HeadSelect extends ListSelect {
     public HeadSelect(String title) {
-        super(title);
+//        super(title);
         this.setRows(1);
-        this.setNullSelectionAllowed(false);
+        this.setNullSelectionAllowed(true);
         this.setImmediate(true);
     }
 }
