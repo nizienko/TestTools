@@ -15,6 +15,7 @@ public class LatestTestsLayout extends VerticalLayout {
     private Table table;
 
     public LatestTestsLayout() {
+        this.setSizeFull();
         table = new Table();
         table.setWidth("100%");
         table.setHeight("100%");
@@ -32,6 +33,7 @@ public class LatestTestsLayout extends VerticalLayout {
         DaoContainer daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
         updateLatestTests(daoContainer.getTestExecutionDao().selectLastWithDescription(50));
         this.addComponent(table);
+        this.setExpandRatio(table, 1f);
 
     }
 

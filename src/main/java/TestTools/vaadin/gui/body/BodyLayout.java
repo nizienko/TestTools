@@ -12,7 +12,6 @@ public class BodyLayout extends VerticalLayout {
     private LatestTestsLayout latestTestsLayout;
 
     public BodyLayout() {
-        this.setSizeFull();
         latestTestsLayout = new LatestTestsLayout();
         this.addComponent(latestTestsLayout);
     }
