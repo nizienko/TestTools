@@ -1,5 +1,6 @@
-package TestTools.vaadin.gui.body;
+package TestTools.vaadin.gui.testresults.body;
 
+import TestTools.Settings;
 import TestTools.core.MainApp;
 import TestTools.database.DaoContainer;
 import TestTools.database.testexecution.TestExecution;
@@ -31,9 +32,9 @@ public class LatestTestsLayout extends VerticalLayout {
         table.addContainerProperty("Date", String.class, null);
         table.addContainerProperty("Status", String.class, null);
         DaoContainer daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
-        updateLatestTests(daoContainer.getTestExecutionDao().selectLastWithDescription(50));
+        updateLatestTests(daoContainer.getTestExecutionDao().selectLastWithDescription(Settings.COUNT_TESTS_RESULTS));
         this.addComponent(table);
-        this.setExpandRatio(table, 1f);
+//        this.setExpandRatio(table, 1f);
 
     }
 

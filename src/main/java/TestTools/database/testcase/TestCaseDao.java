@@ -1,6 +1,7 @@
 package TestTools.database.testcase;
 
 import TestTools.database.AbstractDao;
+import TestTools.database.project.Project;
 import TestTools.database.testsuite.TestSuite;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -18,7 +19,7 @@ public class TestCaseDao extends AbstractDao {
         String SQL = "CREATE TABLE IF NOT EXISTS \"testcase\" (\n" +
                 "    \"id\" INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    \"testsuite_id\" INTEGER,\n" +
-                "    \"issue\" TEXT,\n" +
+                "    \"issue\" TEXT UNIQUE,\n" +
                 "    \"name\" TEXT,\n" +
                 "    \"description\" TEXT,\n" +
                 "    \"status\" integer,\n" +
@@ -69,5 +70,16 @@ public class TestCaseDao extends AbstractDao {
     public void delete(TestCase testCase) {
         String SQL = "delete from testcase where id=?";
         jdbcTemplate.update(SQL, testCase.getId());
+    }
+
+    public List<TestCase> selectByProject(Project project) {
+        String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase where testsuite_id in (select id from testsuite where project_id=?);";
+        return jdbcTemplate.query(SQL, new Object[]{project.getId()}, new TestCaseMapper());
+    }
+
+    public List<TestCase> selectAll() {
+        String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase;";
+        return jdbcTemplate.query(SQL, new Object[]{}, new TestCaseMapper());
+
     }
 }

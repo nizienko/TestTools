@@ -1,7 +1,7 @@
 package TestTools.vaadin;
 
 
-import TestTools.vaadin.gui.MainLayout;
+import TestTools.vaadin.gui.AppLayout;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 
@@ -13,7 +13,8 @@ public class MainUI extends UI {
     @Override
     public void init(VaadinRequest request) {
         this.setTheme("dawn");
-        MainLayout mainLayout = new MainLayout();
-        this.setContent(mainLayout);
+        AppLayout appLayout = new AppLayout();
+        this.setContent(appLayout);
+
     }
 }

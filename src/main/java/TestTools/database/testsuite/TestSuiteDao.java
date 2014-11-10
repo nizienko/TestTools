@@ -2,6 +2,7 @@ package TestTools.database.testsuite;
 
 import TestTools.database.AbstractDao;
 import TestTools.database.project.Project;
+import TestTools.database.testcase.TestCase;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
@@ -57,6 +58,4 @@ public class TestSuiteDao extends AbstractDao {
         String SQL = "delete from testsuite where id=?";
         jdbcTemplate.update(SQL, testSuite.getId());
     }
-
-
 }
