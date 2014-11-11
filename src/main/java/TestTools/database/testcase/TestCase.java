@@ -8,6 +8,12 @@ import java.util.List;
  */
 public class TestCase {
     private Integer id;
+    private Integer testSuiteId;
+    private String name;
+    private String description;
+    private ArrayList<Integer> labelId;
+    private Integer status;
+    private String issue;
 
     public List<Integer> getLabelId() {
         return labelId;
@@ -65,11 +71,5 @@ public class TestCase {
         this.issue = issue;
     }
 
-    private Integer testSuiteId;
-    private String name;
-    private String description;
-    private ArrayList<Integer> labelId;
-    private Integer status;
-    private String issue;
 
 }

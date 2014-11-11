@@ -25,7 +25,6 @@ public class TestCaseMapper implements RowMapper<TestCase> {
                 try {
                     labelsList.add(Integer.parseInt(label));
                 } catch (NumberFormatException e) {
-                    e.printStackTrace();
                 }
             }
             testCase.setLabelId(labelsList);

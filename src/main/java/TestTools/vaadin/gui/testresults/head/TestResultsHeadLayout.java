@@ -140,23 +140,26 @@ public class TestResultsHeadLayout extends HorizontalLayout {
 
         updateButton.addClickListener(new Button.ClickListener() {
             public void buttonClick(Button.ClickEvent clickEvent) {
-               /* projectSelect.removeAllItems();
+/*                projectSelect.removeAllItems();
                 for (Project project : daoContainer.getProjectDao().selectAll()) {
                     projectSelect.addItem(project.getName());
                 }
                 if (currentProject != null) {
+                    projectSelect.setCaption(currentProject.getName());
                     versionSelect.removeAllItems();
                     for (Version version : daoContainer.getVersionDao().selectByProject(currentProject)) {
                         versionSelect.addItem(version.getName());
                     }
                 }
                 if (currentVersion != null) {
+                    versionSelect.setCaption(currentVersion.getName());
                     buildSelect.removeAllItems();
                     for (Build build : daoContainer.getBuildDao().selectByVersion(currentVersion)) {
                         buildSelect.addItem(build.getName());
                     }
                 }
                 if (currentBuild != null) {
+                    buildSelect.setCaption(currentBuild.getName());
                     executionSelect.removeAllItems();
                     for (BuildExecution buildExecution : daoContainer.getBuildExecutionDao().selectByBuild(currentBuild)) {
                         executionSelect.addItem(buildExecution.getName());

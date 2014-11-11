@@ -4,6 +4,7 @@ import TestTools.vaadin.gui.testcases.TestCasesLayout;
 import TestTools.vaadin.gui.testresults.TestResultsLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.Notification;
 
 /**
  * Created by def on 10.11.14.
@@ -15,11 +16,13 @@ public class MainMenu extends MenuBar {
         MenuBar.Command testResultsCommand = new Command() {
             public void menuSelected(MenuItem menuItem) {
                 appLayout.changeBody(new TestResultsLayout());
+                Notification.show("Last test results");
             }
         };
         MenuBar.Command testCasesCommand = new Command() {
             public void menuSelected(MenuItem menuItem) {
                 appLayout.changeBody(new TestCasesLayout());
+                Notification.show("Test cases");
             }
         };
 

@@ -25,17 +25,11 @@ public class LatestTestsLayout extends VerticalLayout {
         table.setImmediate(true);
         table.addContainerProperty("Issue", String.class, null);
         table.addContainerProperty("Name", String.class, null);
-/*        table.addContainerProperty("Project", String.class, null);
-        table.addContainerProperty("Version", String.class, null);
-        table.addContainerProperty("Build", String.class, null);
-        table.addContainerProperty("Execution", String.class, null);*/
         table.addContainerProperty("Date", String.class, null);
         table.addContainerProperty("Status", String.class, null);
         DaoContainer daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
         updateLatestTests(daoContainer.getTestExecutionDao().selectLastWithDescription(Settings.COUNT_TESTS_RESULTS));
         this.addComponent(table);
-//        this.setExpandRatio(table, 1f);
-
     }
 
     public void updateLatestTests(List<TestExecution> testExecutions) {

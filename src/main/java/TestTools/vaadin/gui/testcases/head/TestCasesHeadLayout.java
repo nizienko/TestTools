@@ -8,6 +8,7 @@ import TestTools.database.testsuite.TestSuite;
 import TestTools.vaadin.gui.MySelect;
 import TestTools.vaadin.gui.testcases.body.TestCasesBodyLayout;
 import com.vaadin.data.Property;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 
 /**
@@ -16,8 +17,10 @@ import com.vaadin.ui.HorizontalLayout;
 public class TestCasesHeadLayout extends HorizontalLayout {
     private DaoContainer daoContainer;
     private Project currentProject;
+    private TestSuite currentTestSuite;
     private MySelect projectSelect;
     private MySelect testSuiteSelect;
+    private Button updateButton;
 
     public TestCasesHeadLayout(final TestCasesBodyLayout bodyLayout) {
         daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
@@ -47,6 +50,37 @@ public class TestCasesHeadLayout extends HorizontalLayout {
                 }
             }
         });
+
+        testSuiteSelect.addValueChangeListener(new Property.ValueChangeListener() {
+            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+                String chosenTestSuite;
+                try {
+                    chosenTestSuite = valueChangeEvent.getProperty().getValue().toString();
+                    currentTestSuite = daoContainer.getTestSuiteDao().selectByProjectAndName(currentProject, chosenTestSuite);
+                    bodyLayout.updateTests(daoContainer.getTestCaseDao().selectByTestSuite(currentTestSuite));
+
+                } catch (NullPointerException e) {
+                    currentTestSuite = null;
+                    bodyLayout.updateTests(daoContainer.getTestCaseDao().selectByProject(currentProject));
+                    testSuiteSelect.removeAllItems();
+                }
+            }
+        });
+
+        updateButton = new Button("update");
+        this.addComponent(updateButton);
+        updateButton.addClickListener(new Button.ClickListener() {
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                if (currentTestSuite != null) {
+                    bodyLayout.updateTests(daoContainer.getTestCaseDao().selectByTestSuite(currentTestSuite));
+                } else if (currentProject != null) {
+                    bodyLayout.updateTests(daoContainer.getTestCaseDao().selectByProject(currentProject));
+                } else {
+                    bodyLayout.updateTests(daoContainer.getTestCaseDao().selectAll());
+                }
+            }
+        });
+
     }
 
 
