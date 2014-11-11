@@ -14,6 +14,7 @@ public class AppLayout extends GridLayout {
     private MainMenu mainMenu;
     private HorizontalLayout headLayout;
     private VerticalLayout bodyLayout;
+    private Boolean admin = false;
 
     public AppLayout() {
         super(1, 2);

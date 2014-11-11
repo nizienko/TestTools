@@ -5,6 +5,7 @@ import TestTools.database.buildexecution.BuildExecutionDao;
 import TestTools.database.project.ProjectDao;
 import TestTools.database.testcase.TestCaseDao;
 import TestTools.database.testexecution.TestExecutionDao;
+import TestTools.database.testsettings.TestSettingDao;
 import TestTools.database.testsuite.TestSuiteDao;
 import TestTools.database.version.VersionDao;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,6 +21,7 @@ public class DaoContainer {
     private TestExecutionDao testExecutionDao;
     private TestSuiteDao testSuiteDao;
     private VersionDao versionDao;
+    private TestSettingDao testSettingDao;
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         buildDao = new BuildDao(jdbcTemplate);
@@ -29,6 +31,7 @@ public class DaoContainer {
         testExecutionDao = new TestExecutionDao(jdbcTemplate);
         testSuiteDao = new TestSuiteDao(jdbcTemplate);
         versionDao = new VersionDao(jdbcTemplate);
+        testSettingDao = new TestSettingDao(jdbcTemplate);
     }
 
     public BuildDao getBuildDao() {
@@ -57,5 +60,9 @@ public class DaoContainer {
 
     public VersionDao getVersionDao() {
         return versionDao;
+    }
+
+    public TestSettingDao getTestSettingDao() {
+        return testSettingDao;
     }
 }

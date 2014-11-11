@@ -50,4 +50,11 @@ public class DataBaseTests {
         daoContainer.getTestSuiteDao().createTable();
         daoContainer.getVersionDao().createTable();
     }
+
+    @Test
+    public void createSettingsTables() {
+        // create tables
+        DaoContainer daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
+        daoContainer.getTestSettingDao().createTable();
+    }
 }

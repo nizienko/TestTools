@@ -62,6 +62,7 @@ public class TestCaseDao extends AbstractDao {
         String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase where issue=?;";
         return jdbcTemplate.queryForObject(SQL, new Object[]{issue}, new TestCaseMapper());
     }
+
     public List<TestCase> selectByTestSuite(TestSuite testSuite) {
         String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase where testsuite_id=?;";
         return jdbcTemplate.query(SQL, new Object[]{testSuite.getId()}, new TestCaseMapper());
@@ -80,6 +81,5 @@ public class TestCaseDao extends AbstractDao {
     public List<TestCase> selectAll() {
         String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase;";
         return jdbcTemplate.query(SQL, new Object[]{}, new TestCaseMapper());
-
     }
 }
