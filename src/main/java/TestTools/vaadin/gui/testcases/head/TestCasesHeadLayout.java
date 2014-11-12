@@ -10,6 +10,7 @@ import TestTools.vaadin.gui.testcases.body.TestCasesBodyLayout;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 
 /**
  * Created by def on 11.11.14.
