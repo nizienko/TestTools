@@ -67,7 +67,7 @@ public class TestSettingDao extends AbstractDao {
     }
 
     public void insertValue(String tk, String parameter, String value) {
-        String SQL = "insert into parameters (tk_id, parameter_id, value) " +
+        String SQL = "insert into testvalues (tk_id, parameter_id, value) " +
                 "values ((select id from testconfiguration where tk=?), " +
                 "(select id from parameters where parameter=?), " +
                 "?);";

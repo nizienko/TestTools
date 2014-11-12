@@ -21,7 +21,7 @@ public class TestCaseEditWindow extends Window {
     private Project project;
 
 
-    public TestCaseEditWindow(String issue, TestCasesTable testCasesTable) {
+    public TestCaseEditWindow(String issue) {
         super(issue);
         daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
         testCase = daoContainer.getTestCaseDao().selectByIssue(issue);
@@ -80,6 +80,7 @@ public class TestCaseEditWindow extends Window {
                 try {
                     daoContainer.getTestCaseDao().update(testCase);
                     close();
+                    Notification.show(testCase.getIssue() + " saved.\nUpdate to view changes.", Notification.Type.TRAY_NOTIFICATION);
                 } catch (UncategorizedSQLException e) {
                     Notification.show(testCase.getIssue() + " already exist");
                 }

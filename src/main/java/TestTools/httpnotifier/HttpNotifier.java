@@ -6,6 +6,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -35,6 +36,29 @@ public class HttpNotifier {
         HttpGet httpGet = new HttpGet(url);
         try {
             CloseableHttpResponse response = httpclient.execute(httpGet);
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                StringBuffer responseBody = new StringBuffer();
+                String line;
+                while ((line = br.readLine()) != null) {
+                    responseBody.append(line);
+                    responseBody.append("\r\n");
+                }
+                br.close();
+                return responseBody.toString();
+            } finally {
+                response.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String sendPut(String url) {
+        HttpPut httpPut = new HttpPut(url);
+        try {
+            CloseableHttpResponse response = httpclient.execute(httpPut);
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
                 StringBuffer responseBody = new StringBuffer();
@@ -88,5 +112,13 @@ public class HttpNotifier {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public String sendXml(String url, String xml){
+        return "";
+    }
+
+    public String sendPostCA(String url, Map<String, String> params, String cert, String passkey){
+        return "";
     }
 }

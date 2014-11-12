@@ -40,7 +40,7 @@ public class TestCasesTable extends VerticalLayout {
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
                 try {
                     String issue = (String) table.getContainerProperty(table.getValue(), "Issue").getValue();
-                    UI.getCurrent().addWindow(new TestCaseEditWindow(issue, testCasesTable));
+                    UI.getCurrent().addWindow(new TestCaseEditWindow(issue));
                 } catch (NullPointerException e) {
                 }
             }
