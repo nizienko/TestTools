@@ -3,6 +3,8 @@ package TestTools.database.testsettings;
 import TestTools.database.AbstractDao;
 import TestTools.database.testcase.TestCase;
 import TestTools.database.testcase.TestCaseMapper;
+import TestTools.database.testsuite.TestSuite;
+import TestTools.database.testsuite.TestSuiteMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.HashMap;
@@ -74,35 +76,53 @@ public class TestSettingDao extends AbstractDao {
         jdbcTemplate.update(SQL, tk, parameter, value);
     }
 
-    public void updateValue(String tk, String parameter, String value) {
+    public void updateValue(TestConfiguration tk, TestSetting testSetting) {
         String SQL = "update testvalues set value=? where " +
-                "tk_id in (select id from testconfiguration where tk=?) " +
+                "tk_id=? " +
                 "and parameter_id in (select id from parameters where parameter=?)";
         jdbcTemplate.update(SQL,
-                value,
-                tk,
-                parameter
+                testSetting.getValue(),
+                tk.getId(),
+                testSetting.getParameterName()
         );
     }
 
-    public List<HashMap<String, String>> selectByTK(String tk) {
-        String SQL = "select p.parameter, tv.value " +
+    public List<TestSetting> selectByTestConfiguration(TestConfiguration tk) {
+        String SQL = "select p.parameter parameter, tv.value value, p.description description " +
                 "from testvalues tv join parameters p " +
                 "on tv.tk_id=p.id " +
                 "join testconfiguration tk " +
                 "on tv.tk_id=tk.id " +
-                "where tk.id=?;";
-        return jdbcTemplate.query(SQL, new Object[]{tk}, new TestSettingMapper());
+                "where tk.id=?";
+        return jdbcTemplate.query(SQL, new Object[]{tk.getId()}, new TestSettingMapper());
     }
 
-    public List<HashMap<String, String>> selectByTKContains(String tk, String param) {
-        String SQL = "select p.parameter parameter, tv.value value " +
+    public List<TestSetting> selectByTestConfigurationContains(TestConfiguration tk, String param) {
+        String SQL = "select p.parameter parameter, tv.value value, p.description description " +
                 "from testvalues tv join parameters p " +
                 "on tv.tk_id=p.id " +
                 "join testconfiguration tk " +
                 "on tv.tk_id=tk.id " +
                 "where tk.id=? " +
                 "and p.parameter like '%?%';";
-        return jdbcTemplate.query(SQL, new Object[]{tk, param}, new TestSettingMapper());
+        return jdbcTemplate.query(SQL, new Object[]{tk.getId(), param}, new TestSettingMapper());
     }
+
+    public List<TestConfiguration> selectTestConfigurations() {
+        String SQL = "select id, tk, description from testconfiguration;";
+        return jdbcTemplate.query(SQL, new Object[]{}, new TestConfigurationMapper());
+    }
+    public TestConfiguration selectTestConfigurationByName(String tk) {
+        String SQL = "select id, tk, description from testconfiguration where tk=?;";
+        return jdbcTemplate.queryForObject(SQL, new Object[]{tk}, new TestConfigurationMapper());
+    }
+
+    public TestSetting selectTestSetting(TestConfiguration tk, String param) {
+        String SQL = "select p.parameter parameter, tv.value value, p.description description " +
+                "from testvalues tv join parameters p " +
+                "on tv.parameter_id=p.id " +
+                "where tv.tk_id=? and p.parameter=?;";
+        return jdbcTemplate.queryForObject(SQL, new Object[]{tk.getId(), param}, new TestSettingMapper());
+    }
+
 }

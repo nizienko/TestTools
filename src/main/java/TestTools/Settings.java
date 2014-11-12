@@ -7,5 +7,5 @@ public class Settings {
     private Settings() {
     }
 
-    public static final int COUNT_TESTS_RESULTS = 500;
+    public static final int COUNT_TESTS_RESULTS = 100;
 }

@@ -18,10 +18,8 @@ import java.util.List;
  */
 public class TestCasesTable extends VerticalLayout {
     private Table table;
-    TestCasesTable testCasesTable;
 
     public TestCasesTable() {
-        testCasesTable = this;
         this.setSizeFull();
         table = new Table();
         table.setWidth("100%");

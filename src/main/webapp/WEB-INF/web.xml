@@ -3,12 +3,11 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
     <display-name>Test tools</display-name>
-    <!--           <context-param>
+               <context-param>
                    <description>Vaadin production mode</description>
                    <param-name>productionMode</param-name>
                    <param-value>false</param-value>
                </context-param>
-               -->
     <servlet>
         <servlet-name>MainUI</servlet-name>
         <servlet-class>com.vaadin.server.VaadinServlet</servlet-class>

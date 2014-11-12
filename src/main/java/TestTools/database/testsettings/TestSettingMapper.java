@@ -9,10 +9,12 @@ import java.util.HashMap;
 /**
  * Created by def on 12.11.14.
  */
-public class TestSettingMapper implements RowMapper<HashMap<String, String>> {
-    public HashMap<String, String> mapRow(ResultSet resultSet, int i) throws SQLException {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
-        hashMap.put(resultSet.getString("parameter"), resultSet.getString("value"));
-        return hashMap;
+public class TestSettingMapper implements RowMapper<TestSetting> {
+    public TestSetting mapRow(ResultSet resultSet, int i) throws SQLException {
+        TestSetting testSetting = new TestSetting();
+        testSetting.setParameterName(resultSet.getString("parameter"));
+        testSetting.setDescription(resultSet.getString("description"));
+        testSetting.setValue(resultSet.getString("value"));
+        return testSetting;
     }
 }
