@@ -53,12 +53,12 @@ public class TestSettingDao extends AbstractDao {
         );
     }
 
-    public void updateParameter(Integer id, String name, String description) {
-        String SQL = "update testconfiguration set tk=?, description=? where id=?";
+    public void updateParameter(TestParameter testParameter) {
+        String SQL = "update parameters set parameter=?, description=? where id=?";
         jdbcTemplate.update(SQL,
-                name,
-                description,
-                id
+                testParameter.getName(),
+                testParameter.getDescription(),
+                testParameter.getId()
         );
     }
 
@@ -99,6 +99,12 @@ public class TestSettingDao extends AbstractDao {
         String SQL = "select id, tk, description from testconfiguration;";
         return jdbcTemplate.query(SQL, new Object[]{}, new TestConfigurationMapper());
     }
+
+    public List<TestParameter> selectAllParameters() {
+        String SQL = "select id, parameter, description from parameters;";
+        return jdbcTemplate.query(SQL, new Object[]{}, new TestParameterMapper());
+    }
+
     public TestConfiguration selectTestConfigurationByName(String tk) {
         String SQL = "select id, tk, description from testconfiguration where tk=?;";
         return jdbcTemplate.queryForObject(SQL, new Object[]{tk}, new TestConfigurationMapper());
@@ -115,6 +121,14 @@ public class TestSettingDao extends AbstractDao {
     public TestParameter selectParameter(String param) {
         String SQL = "select id, parameter, description from parameters where parameter=?";
         return jdbcTemplate.queryForObject(SQL, new Object[]{param}, new TestParameterMapper());
+    }
+
+    public void deleteParameter(TestParameter testParameter) {
+        String SQL = "delete from parameters where id=?";
+        jdbcTemplate.update(SQL, testParameter.getId());
+
+        SQL = "delete from testvalues where parameter_id=?";
+        jdbcTemplate.update(SQL, testParameter.getId());
     }
 
 }

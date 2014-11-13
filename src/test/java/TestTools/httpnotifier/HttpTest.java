@@ -24,16 +24,16 @@ public class HttpTest {
     public void postRequest() {
         HttpNotifier httpNotifier = (HttpNotifier) MainApp.getCtx().getBean("httpNotifier");
         int j = 1;
-        for (int y = 0; y < 10; y++) {
-            for (int i = 20; i < 300; i++) {
+        for (int y = 0; y < 5; y++) {
+            for (int i = 10; i < 50; i++) {
                 Map params = new HashMap();
-                params.put("project", "penelope");
-                params.put("version", "14." + y);
-                params.put("build", "111" + y % 40);
+                params.put("project", "skrat");
+                params.put("version", "2.3" + y);
+                params.put("build", "12" + y + "00");
                 params.put("execution", "functional");
-                params.put("status", "1");
-                params.put("name", "Пенелопный тест " + i);
-                params.put("issue", "TC-1" + i + j);
+                params.put("status", (i + y) % 2);
+                params.put("name", "Скратовский тест " + i);
+                params.put("issue", "TC-" + i + 200);
                 System.out.println(j + ". " + httpNotifier.sendPost(url, params));
                 j++;
             }

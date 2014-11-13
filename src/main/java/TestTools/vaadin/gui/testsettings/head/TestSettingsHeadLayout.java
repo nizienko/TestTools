@@ -4,10 +4,13 @@ import TestTools.core.MainApp;
 import TestTools.database.DaoContainer;
 import TestTools.database.testsettings.TestConfiguration;
 import TestTools.vaadin.gui.MySelect;
+import TestTools.vaadin.gui.testsettings.body.AddNewParameterWindow;
 import TestTools.vaadin.gui.testsettings.body.AddNewTestConfigurationWindow;
+import TestTools.vaadin.gui.testsettings.body.EditParametersWindow;
 import TestTools.vaadin.gui.testsettings.body.TestSettingsBodyLayout;
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
+import org.springframework.jdbc.UncategorizedSQLException;
 
 
 /**
@@ -18,9 +21,12 @@ public class TestSettingsHeadLayout extends HorizontalLayout {
     private MySelect tkSelect;
     private TestConfiguration currentTestConfiguration;
     private TestSettingsBodyLayout testSettingsBodyLayout;
-    private Label title;
     private TextField parameterField;
     private Button updateButton;
+    private Button addNewParameterButton;
+    private Button editParametersButton;
+
+
 
 
     public TestSettingsHeadLayout(final TestSettingsBodyLayout testSettingsBodyLayout) {
@@ -46,11 +52,26 @@ public class TestSettingsHeadLayout extends HorizontalLayout {
                 }
             }
         });
-        title = new Label(" Settings");
-        this.addComponent(title);
+        addNewParameterButton = new Button("New parameter");
+        this.addComponent(addNewParameterButton);
+        addNewParameterButton.addClickListener(new Button.ClickListener() {
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                UI.getCurrent().addWindow(new AddNewParameterWindow());
+            }
+        });
+        editParametersButton = new Button("Edit parameters");
+        this.addComponent(editParametersButton);
+        editParametersButton.addClickListener(new Button.ClickListener() {
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                UI.getCurrent().addWindow(new EditParametersWindow());
+            }
+        });
+        try {
         for (TestConfiguration tk : daoContainer.getTestSettingDao().selectTestConfigurations()) {
             tkSelect.addItem(tk.getName());
         }
+        }
+        catch (UncategorizedSQLException e) {}
         tkSelect.addItem("add new");
         tkSelect.addValueChangeListener(new Property.ValueChangeListener() {
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
@@ -66,7 +87,6 @@ public class TestSettingsHeadLayout extends HorizontalLayout {
                         } else {
                             testSettingsBodyLayout.updateTestSettings(currentTestConfiguration, daoContainer.getTestSettingDao().selectByTestConfigurationContains(currentTestConfiguration, parameterField.getValue()));
                         }
-                        title.setValue(currentTestConfiguration.getName() + " " + currentTestConfiguration.getDescription());
                     }
                 }
                 catch (NullPointerException e){
