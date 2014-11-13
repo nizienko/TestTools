@@ -17,9 +17,12 @@ public class EditParametersWindow extends Window {
     DaoContainer daoContainer;
     Table table;
     Button updateButton;
+    CheckBox really;
     final String width = "600px";
+    final String width2 = "500px";
 
-    public EditParametersWindow(){
+
+    public EditParametersWindow() {
         super("Edit parameters");
         daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
         center();
@@ -41,10 +44,10 @@ public class EditParametersWindow extends Window {
         table.addValueChangeListener(new Property.ValueChangeListener() {
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
                 try {
-                String parameter = (String) table.getContainerProperty(table.getValue(), "Parameter").getValue();
-                UI.getCurrent().addWindow(new EditParameterWindow(parameter));
+                    String parameter = (String) table.getContainerProperty(table.getValue(), "Parameter").getValue();
+                    UI.getCurrent().addWindow(new EditParameterWindow(parameter));
+                } catch (NullPointerException e) {
                 }
-                catch (NullPointerException e) {}
             }
         });
         updateButton.addClickListener(new Button.ClickListener() {
@@ -54,7 +57,8 @@ public class EditParametersWindow extends Window {
         });
 
     }
-    private void update(){
+
+    private void update() {
         int i = 1;
         table.removeAllItems();
         for (TestParameter tp : daoContainer.getTestSettingDao().selectAllParameters()) {
@@ -68,21 +72,25 @@ public class EditParametersWindow extends Window {
 
     private class EditParameterWindow extends Window {
         TestParameter testParameter;
+
         public EditParameterWindow(String parameter) {
             super(parameter);
             try {
                 testParameter = daoContainer.getTestSettingDao().selectParameter(parameter);
-            }
-            catch (EmptyResultDataAccessException e){
+            } catch (EmptyResultDataAccessException e) {
                 Notification.show("No such parameter, click update",
-                        Notification.Type.ERROR_MESSAGE);            }
+                        Notification.Type.ERROR_MESSAGE);
+            }
             center();
+            setWidth(width2);
             VerticalLayout content = new VerticalLayout();
             setContent(content);
             final TextField name = new TextField("Name");
             name.setValue(testParameter.getName());
             final TextField description = new TextField("Description");
             description.setValue(testParameter.getDescription());
+            name.setWidth(width2);
+            description.setWidth(width2);
             Button save = new Button("Save");
             content.addComponent(name);
             content.addComponent(description);
@@ -112,19 +120,28 @@ public class EditParametersWindow extends Window {
             Button delete = new Button("Delete");
             delete.addClickListener(new Button.ClickListener() {
                 public void buttonClick(Button.ClickEvent clickEvent) {
-                    try {
-
-                        daoContainer.getTestSettingDao().deleteParameter(testParameter);
-                    Notification.show(name.getValue() + " deleted",
-                            Notification.Type.TRAY_NOTIFICATION);
-                        close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Notification.show("Error", Notification.Type.ERROR_MESSAGE);
+                    if (really.getValue()){
+                        try {
+                            daoContainer.getTestSettingDao().deleteParameter(testParameter);
+                            Notification.show(name.getValue() + " deleted",
+                                    Notification.Type.TRAY_NOTIFICATION);
+                            close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Notification.show("Error", Notification.Type.ERROR_MESSAGE);
+                        }
                     }
+                    else {
+                        Notification.show("You are not sure",
+                                Notification.Type.WARNING_MESSAGE);
+                    }
+
                 }
             });
             horizontalLayout.addComponent(delete);
+            really = new CheckBox("I'm sure!");
+            really.setValue(false);
+            horizontalLayout.addComponent(really);
 
         }
     }
