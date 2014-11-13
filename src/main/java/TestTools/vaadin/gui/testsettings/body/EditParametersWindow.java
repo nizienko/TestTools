@@ -57,7 +57,6 @@ public class EditParametersWindow extends Window {
     private void update(){
         int i = 1;
         table.removeAllItems();
-        System.out.println("Updating");
         for (TestParameter tp : daoContainer.getTestSettingDao().selectAllParameters()) {
             table.addItem(new Object[]{
                     tp.getName(),

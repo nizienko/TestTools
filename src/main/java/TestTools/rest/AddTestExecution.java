@@ -22,16 +22,16 @@ public class AddTestExecution extends RestServlet {
         try {
             te = parse(in);
             testManager.addTestExecution(te);
-            out.print(buildAnswer("0", "success"));
+            out.print(buildJSONAnswer("0", "success"));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            out.print(buildAnswer("-1", "parameter missing"));
+            out.print(buildJSONAnswer("-1", "parameter missing"));
         } catch (IllegalStateException e) {
             e.printStackTrace();
-            out.print(buildAnswer("-1", e.getMessage()));
+            out.print(buildJSONAnswer("-1", e.getMessage()));
         } catch (Exception e) {
             e.printStackTrace();
-            out.print(buildAnswer("-1", "error"));
+            out.print(buildJSONAnswer("-1", "error"));
         }
     }
 

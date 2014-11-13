@@ -1,9 +1,10 @@
 package TestTools.rest;
 
 import TestTools.core.MainApp;
-import TestTools.core.Notifier;
-import TestTools.database.DaoContainer;
 import TestTools.testmanager.TestManager;
+import org.jdom.Document;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Map;
 
 /**
@@ -20,7 +22,7 @@ import java.util.Map;
 public abstract class RestServlet extends HttpServlet {
     protected TestManager testManager;
 
-    public abstract void process(Map<String, String[]> request, PrintWriter response);
+    public abstract void process(Map<String, String[]> in, PrintWriter out);
 
     @Override
     public void init() {
@@ -41,7 +43,7 @@ public abstract class RestServlet extends HttpServlet {
         }
     }
 
-    protected String buildAnswer(String status, String message) {
+    protected String buildJSONAnswer(String status, String message) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("status", status);
@@ -52,5 +54,19 @@ public abstract class RestServlet extends HttpServlet {
             e.printStackTrace();
         }
         return jsonObject.toString();
+    }
+
+    protected String buildXMLAnswer(Document doc){
+        StringWriter result = new StringWriter();
+        try {
+
+            XMLOutputter serializer = new XMLOutputter();
+            serializer.setFormat(Format.getPrettyFormat());
+            serializer.output(doc, result);
+        }
+        catch (IOException e) {
+            System.err.println(e);
+        }
+        return result.toString();
     }
 }

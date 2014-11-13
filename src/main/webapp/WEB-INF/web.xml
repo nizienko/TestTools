@@ -29,5 +29,13 @@
         <servlet-name>AddTestExecution</servlet-name>
         <url-pattern>/rest/addtestexecution</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>GetTestSettings</servlet-name>
+        <servlet-class>TestTools.rest.GetTestSettings</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetTestSettings</servlet-name>
+        <url-pattern>/rest/gettestsettings</url-pattern>
+    </servlet-mapping>
 
 </web-app>

@@ -6,11 +6,15 @@ import TestTools.database.buildexecution.BuildExecution;
 import TestTools.database.project.Project;
 import TestTools.database.testcase.TestCase;
 import TestTools.database.testexecution.TestExecution;
+import TestTools.database.testsettings.TestConfiguration;
+import TestTools.database.testsettings.TestSetting;
 import TestTools.database.testsuite.TestSuite;
 import TestTools.database.version.Version;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by def on 06.11.14.
@@ -89,6 +93,24 @@ public class TestManager {
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException("Error inserting test execution");
+        }
+    }
+
+    public List<TestSetting> getSettings(String testConfigurationName, String contains) {
+        TestConfiguration testConfiguration;
+        try {
+            testConfiguration = daoContainer.getTestSettingDao().selectTestConfigurationByName(testConfigurationName);
+            List<TestSetting>  testSettings;
+            if (contains == null) {
+                testSettings= daoContainer.getTestSettingDao().selectByTestConfiguration(testConfiguration);
+            }
+            else {
+                testSettings= daoContainer.getTestSettingDao().selectByTestConfigurationContains(testConfiguration, contains);
+            }
+            return testSettings;
+        }
+        catch (Exception e){
+            return  null;
         }
     }
 

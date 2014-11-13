@@ -25,6 +25,7 @@ public class MainApp {
             daoContainer.getTestExecutionDao().createTable();
             daoContainer.getTestSuiteDao().createTable();
             daoContainer.getVersionDao().createTable();
+            daoContainer.getTestSettingDao().createTable();
         }
         return ctx;
     }
