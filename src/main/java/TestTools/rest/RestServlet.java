@@ -36,6 +36,7 @@ public abstract class RestServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("text/*; charset=utf-8");
         try {
             process(request.getParameterMap(), response.getWriter());
         } catch (IOException e) {
