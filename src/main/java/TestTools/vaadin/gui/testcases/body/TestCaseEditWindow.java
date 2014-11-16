@@ -5,7 +5,6 @@ import TestTools.database.DaoContainer;
 import TestTools.database.project.Project;
 import TestTools.database.testcase.TestCase;
 import TestTools.database.testsuite.TestSuite;
-import com.vaadin.data.util.TextFileProperty;
 import com.vaadin.ui.*;
 import org.springframework.jdbc.UncategorizedSQLException;
 
@@ -17,18 +16,15 @@ import java.util.List;
 public class TestCaseEditWindow extends Window {
     private DaoContainer daoContainer;
     private TestCase testCase;
-    private TestSuite testSuite;
-    private Project project;
-
+    private List<TestSuite> testSuites;
 
     public TestCaseEditWindow(String issue) {
         super(issue);
         daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
         testCase = daoContainer.getTestCaseDao().selectByIssue(issue);
-        testSuite = daoContainer.getTestSuiteDao().select(testCase.getTestSuiteId());
-        project = daoContainer.getProjectDao().select(testSuite.getProjectId());
+        testSuites = daoContainer.getTestSuiteDao().selectByTestCase(testCase);
         center();
-        setWidth("400px");
+        setWidth("500px");
         VerticalLayout content = new VerticalLayout();
         setContent(content);
 
@@ -39,21 +35,15 @@ public class TestCaseEditWindow extends Window {
         final TextField nameTextField = new TextField("Title");
         nameTextField.setValue(testCase.getName());
         content.addComponent(nameTextField);
-        nameTextField.setWidth("400px");
+        nameTextField.setWidth("500px");
 
 
         final TextArea descriptionTextArea = new TextArea("Description");
         descriptionTextArea.setValue(testCase.getDescription());
         content.addComponent(descriptionTextArea);
         descriptionTextArea.setSizeFull();
-        descriptionTextArea.setHeight("300px");
+        descriptionTextArea.setHeight("200px");
 
-        ListSelect testSuitSelect = new ListSelect();
-        testSuitSelect.setRows(1);
-        testSuitSelect.setNullSelectionAllowed(false);
-        for (TestSuite ts : daoContainer.getTestSuiteDao().selectByProject(project)) {
-            testSuitSelect.addItem(ts.getTestSuiteName());
-        }
 
         final CheckBox active = new CheckBox("active");
         if (testCase.getStatus() == 1) {
@@ -63,10 +53,12 @@ public class TestCaseEditWindow extends Window {
         }
         content.addComponent(active);
 
-        content.addComponent(testSuitSelect);
         Button save = new Button("Save");
         content.addComponent(save);
-
+        for (TestSuite testSuite : testSuites) {
+            Project project = daoContainer.getProjectDao().select(testSuite.getProjectId());
+            content.addComponent(new Label(project.getName() + " " + testSuite.getTestSuiteName()));
+        }
         save.addClickListener(new Button.ClickListener() {
             public void buttonClick(Button.ClickEvent clickEvent) {
                 testCase.setName(nameTextField.getValue());
@@ -86,6 +78,7 @@ public class TestCaseEditWindow extends Window {
                 }
             }
         });
+
 
     }
 }

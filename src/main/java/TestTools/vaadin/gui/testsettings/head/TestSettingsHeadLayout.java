@@ -9,7 +9,10 @@ import TestTools.vaadin.gui.testsettings.body.AddNewTestConfigurationWindow;
 import TestTools.vaadin.gui.testsettings.body.EditParametersWindow;
 import TestTools.vaadin.gui.testsettings.body.TestSettingsBodyLayout;
 import com.vaadin.data.Property;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import org.springframework.jdbc.UncategorizedSQLException;
 
 
@@ -27,8 +30,6 @@ public class TestSettingsHeadLayout extends HorizontalLayout {
     private Button editParametersButton;
 
 
-
-
     public TestSettingsHeadLayout(final TestSettingsBodyLayout testSettingsBodyLayout) {
         this.testSettingsBodyLayout = testSettingsBodyLayout;
         daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
@@ -42,6 +43,7 @@ public class TestSettingsHeadLayout extends HorizontalLayout {
         updateButton.addClickListener(new Button.ClickListener() {
             public void buttonClick(Button.ClickEvent clickEvent) {
                 if (currentTestConfiguration != null) {
+                    updateTKList();
                     if ("".equals(parameterField.getValue())) {
                         testSettingsBodyLayout.updateTestSettings(currentTestConfiguration, daoContainer.getTestSettingDao().selectByTestConfiguration(currentTestConfiguration));
                     } else {
@@ -66,13 +68,7 @@ public class TestSettingsHeadLayout extends HorizontalLayout {
                 UI.getCurrent().addWindow(new EditParametersWindow());
             }
         });
-        try {
-        for (TestConfiguration tk : daoContainer.getTestSettingDao().selectTestConfigurations()) {
-            tkSelect.addItem(tk.getName());
-        }
-        }
-        catch (UncategorizedSQLException e) {}
-        tkSelect.addItem("add new");
+        updateTKList();
         tkSelect.addValueChangeListener(new Property.ValueChangeListener() {
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
                 String chosenTK;
@@ -88,11 +84,20 @@ public class TestSettingsHeadLayout extends HorizontalLayout {
                             testSettingsBodyLayout.updateTestSettings(currentTestConfiguration, daoContainer.getTestSettingDao().selectByTestConfigurationContains(currentTestConfiguration, parameterField.getValue()));
                         }
                     }
-                }
-                catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     testSettingsBodyLayout.clear();
                 }
             }
         });
+    }
+
+    private void updateTKList() {
+        try {
+            for (TestConfiguration tk : daoContainer.getTestSettingDao().selectTestConfigurations()) {
+                tkSelect.addItem(tk.getName());
+            }
+            tkSelect.addItem("add new");
+        } catch (UncategorizedSQLException e) {
+        }
     }
 }

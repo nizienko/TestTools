@@ -3,7 +3,6 @@ package TestTools.vaadin.gui;
 import TestTools.vaadin.gui.testcases.TestCasesLayout;
 import TestTools.vaadin.gui.testresults.TestResultsLayout;
 import TestTools.vaadin.gui.testsettings.TestSettingsLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Notification;
 
@@ -35,9 +34,10 @@ public class MainMenu extends MenuBar {
 
 
         main = this.addItem("menu", null, null);
-        main.addItem("Last results", testResultsCommand);
-        main.addItem("Test case list", testCasesCommand);
-        main.addItem("Settings", settingsCommand);
+        MenuItem manage = main.addItem("Manage", null, null);
+        main.addItem("Test results", testResultsCommand);
+        manage.addItem("Test suites", testCasesCommand);
+        manage.addItem("Settings", settingsCommand);
         appLayout.changeBody(new TestResultsLayout());
     }
 }

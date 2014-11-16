@@ -10,7 +10,7 @@ import com.vaadin.ui.*;
 public class AddNewParameterWindow extends Window {
     DaoContainer daoContainer;
 
-    public AddNewParameterWindow(){
+    public AddNewParameterWindow() {
         super("New parameter");
         String width = "600px";
         daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
@@ -30,7 +30,7 @@ public class AddNewParameterWindow extends Window {
             public void buttonClick(Button.ClickEvent clickEvent) {
                 try {
                     if (!"".equals(name.getValue())) {
-                        daoContainer.getTestSettingDao().insertParameter(name.getValue(),description.getValue());
+                        daoContainer.getTestSettingDao().insertParameter(name.getValue(), description.getValue());
                         close();
                         Notification.show(name.getValue() + " added",
                                 Notification.Type.TRAY_NOTIFICATION);

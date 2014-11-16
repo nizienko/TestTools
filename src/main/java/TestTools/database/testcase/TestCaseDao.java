@@ -18,7 +18,6 @@ public class TestCaseDao extends AbstractDao {
     public void createTable() {
         String SQL = "CREATE TABLE IF NOT EXISTS \"testcase\" (\n" +
                 "    \"id\" INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    \"testsuite_id\" INTEGER,\n" +
                 "    \"issue\" TEXT UNIQUE,\n" +
                 "    \"name\" TEXT,\n" +
                 "    \"description\" TEXT,\n" +
@@ -30,9 +29,8 @@ public class TestCaseDao extends AbstractDao {
     }
 
     public void insert(TestCase testCase) {
-        String SQL = "insert into testcase (testsuite_id, issue, name, description, status, label_id) values (?, ?, ?, ?, ?, ?);";
+        String SQL = "insert into testcase (issue, name, description, status, label_id) values (?, ?, ?, ?, ?);";
         jdbcTemplate.update(SQL,
-                testCase.getTestSuiteId(),
                 testCase.getIssue(),
                 testCase.getName(),
                 testCase.getDescription(),
@@ -41,9 +39,8 @@ public class TestCaseDao extends AbstractDao {
     }
 
     public void update(TestCase testCase) {
-        String SQL = "update testcase set testsuite_id=?, issue=?, name=?, description=?, status=?, label_id=? where id=?";
+        String SQL = "update testcase set issue=?, name=?, description=?, status=?, label_id=? where id=?";
         jdbcTemplate.update(SQL,
-                testCase.getTestSuiteId(),
                 testCase.getIssue(),
                 testCase.getName(),
                 testCase.getDescription(),
@@ -54,17 +51,17 @@ public class TestCaseDao extends AbstractDao {
     }
 
     public TestCase select(Integer id) {
-        String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase where id=?;";
+        String SQL = "select id, issue, name, description, status, label_id from testcase where id=?;";
         return jdbcTemplate.queryForObject(SQL, new Object[]{id}, new TestCaseMapper());
     }
 
     public TestCase selectByIssue(String issue) {
-        String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase where issue=?;";
+        String SQL = "select id, issue, name, description, status, label_id from testcase where issue=?;";
         return jdbcTemplate.queryForObject(SQL, new Object[]{issue}, new TestCaseMapper());
     }
 
     public List<TestCase> selectByTestSuite(TestSuite testSuite) {
-        String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase where testsuite_id=?;";
+        String SQL = "select id, issue, name, description, status, label_id from testcase where id in (select testcase_id from testsuitecontent where testsuite_id=?);";
         return jdbcTemplate.query(SQL, new Object[]{testSuite.getId()}, new TestCaseMapper());
     }
 
@@ -74,12 +71,12 @@ public class TestCaseDao extends AbstractDao {
     }
 
     public List<TestCase> selectByProject(Project project) {
-        String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase where testsuite_id in (select id from testsuite where project_id=?);";
+        String SQL = "select id, issue, name, description, status, label_id from testcase where id in (select testcase_id from testsuitecontent where testsuite_id in (select id from testsuite where project_id=?));";
         return jdbcTemplate.query(SQL, new Object[]{project.getId()}, new TestCaseMapper());
     }
 
     public List<TestCase> selectAll() {
-        String SQL = "select id, testsuite_id, issue, name, description, status, label_id from testcase;";
+        String SQL = "select id, issue, name, description, status, label_id from testcase order by issue desc;";
         return jdbcTemplate.query(SQL, new Object[]{}, new TestCaseMapper());
     }
 }

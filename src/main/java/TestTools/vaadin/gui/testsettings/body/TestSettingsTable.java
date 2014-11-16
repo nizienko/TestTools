@@ -2,7 +2,6 @@ package TestTools.vaadin.gui.testsettings.body;
 
 import TestTools.database.testsettings.TestConfiguration;
 import TestTools.database.testsettings.TestSetting;
-import TestTools.vaadin.gui.testcases.body.TestCaseEditWindow;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
@@ -16,6 +15,7 @@ import java.util.List;
 public class TestSettingsTable extends VerticalLayout {
     private TestConfiguration testConfiguration;
     private Table table;
+
     public TestSettingsTable() {
         this.setSizeFull();
         table = new Table();
@@ -38,6 +38,7 @@ public class TestSettingsTable extends VerticalLayout {
             }
         });
     }
+
     public void updateTestSettings(TestConfiguration testConfiguration, List<TestSetting> testSettings) {
         table.removeAllItems();
         this.testConfiguration = testConfiguration;
@@ -51,7 +52,8 @@ public class TestSettingsTable extends VerticalLayout {
             i++;
         }
     }
-    public void clear(){
+
+    public void clear() {
         table.removeAllItems();
         testConfiguration = null;
     }

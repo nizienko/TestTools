@@ -12,15 +12,16 @@ import java.util.List;
 public class TestSettingsBodyLayout extends VerticalLayout {
     TestSettingsTable testSettingsTable;
 
-    public TestSettingsBodyLayout(){
+    public TestSettingsBodyLayout() {
         testSettingsTable = new TestSettingsTable();
         this.addComponent(testSettingsTable);
     }
-    public void updateTestSettings(TestConfiguration testConfiguration, List<TestSetting> testSettingList){
+
+    public void updateTestSettings(TestConfiguration testConfiguration, List<TestSetting> testSettingList) {
         testSettingsTable.updateTestSettings(testConfiguration, testSettingList);
     }
 
-    public void clear(){
+    public void clear() {
         testSettingsTable.clear();
     }
 }

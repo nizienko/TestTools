@@ -17,7 +17,7 @@ public class MainApp {
     public synchronized static ApplicationContext getCtx() {
         if (ctx == null) {
             ctx = new ClassPathXmlApplicationContext("Beans.xml");
-            DaoContainer daoContainer = (DaoContainer)ctx.getBean("daoContainer");
+            DaoContainer daoContainer = (DaoContainer) ctx.getBean("daoContainer");
             daoContainer.getBuildDao().createTable();
             daoContainer.getBuildExecutionDao().createTable();
             daoContainer.getProjectDao().createTable();

@@ -1,7 +1,5 @@
 package TestTools.vaadin.gui;
 
-import TestTools.database.testexecution.TestExecution;
-import TestTools.vaadin.gui.testresults.TestResultsLayout;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;

@@ -27,13 +27,13 @@ public class HttpTest {
         for (int y = 0; y < 5; y++) {
             for (int i = 10; i < 50; i++) {
                 Map params = new HashMap();
-                params.put("project", "skrat");
-                params.put("version", "2.3" + y);
+                params.put("project", "calypso");
+                params.put("version", "2.5" + y);
                 params.put("build", "12" + y + "00");
                 params.put("execution", "functional");
                 params.put("status", (i + y) % 2);
-                params.put("name", "Скратовский тест " + i);
-                params.put("issue", "TC-" + i + 200);
+                params.put("name", "Депозитный тест " + i);
+                params.put("issue", "TC-" + i + 201);
                 System.out.println(j + ". " + httpNotifier.sendPost(url, params));
                 j++;
             }

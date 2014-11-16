@@ -4,7 +4,6 @@ import TestTools.database.AbstractDao;
 import TestTools.database.version.Version;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**

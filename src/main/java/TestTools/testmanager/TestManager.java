@@ -8,12 +8,10 @@ import TestTools.database.testcase.TestCase;
 import TestTools.database.testexecution.TestExecution;
 import TestTools.database.testsettings.TestConfiguration;
 import TestTools.database.testsettings.TestSetting;
-import TestTools.database.testsuite.TestSuite;
 import TestTools.database.version.Version;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -66,7 +64,7 @@ public class TestManager {
             try {
                 testCase = daoContainer.getTestCaseDao().selectByIssue(te.getTestCaseIssue());
             } catch (EmptyResultDataAccessException e) {
-                TestSuite testSuite;
+                /*TestSuite testSuite;
                 try {
                     testSuite = daoContainer.getTestSuiteDao().selectByProjectAndName(project, "default");
                 } catch (EmptyResultDataAccessException e2) {
@@ -76,12 +74,11 @@ public class TestManager {
                     testSuite.setDescription("new tests created here");
                     daoContainer.getTestSuiteDao().insert(testSuite);
                     testSuite = daoContainer.getTestSuiteDao().selectByProjectAndName(project, "default");
-                }
+                }*/
                 testCase = new TestCase();
                 testCase.setIssue(te.getTestCaseIssue());
                 testCase.setName(te.getTestCaseName());
                 testCase.setDescription("autocreated");
-                testCase.setTestSuiteId(testSuite.getId());
                 testCase.setStatus(1);
                 daoContainer.getTestCaseDao().insert(testCase);
                 testCase = daoContainer.getTestCaseDao().selectByIssue(te.getTestCaseIssue());
@@ -100,17 +97,15 @@ public class TestManager {
         TestConfiguration testConfiguration;
         try {
             testConfiguration = daoContainer.getTestSettingDao().selectTestConfigurationByName(testConfigurationName);
-            List<TestSetting>  testSettings;
+            List<TestSetting> testSettings;
             if (contains == null) {
-                testSettings= daoContainer.getTestSettingDao().selectByTestConfiguration(testConfiguration);
-            }
-            else {
-                testSettings= daoContainer.getTestSettingDao().selectByTestConfigurationContains(testConfiguration, contains);
+                testSettings = daoContainer.getTestSettingDao().selectByTestConfiguration(testConfiguration);
+            } else {
+                testSettings = daoContainer.getTestSettingDao().selectByTestConfigurationContains(testConfiguration, contains);
             }
             return testSettings;
-        }
-        catch (Exception e){
-            return  null;
+        } catch (Exception e) {
+            return null;
         }
     }
 

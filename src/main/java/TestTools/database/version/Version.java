@@ -5,11 +5,11 @@ package TestTools.database.version;
  */
 public class Version {
 
-    public Version(){
+    public Version() {
 
     }
 
-    public Version(Integer projectId, String name, String description){
+    public Version(Integer projectId, String name, String description) {
         this.projectId = projectId;
         this.name = name;
         this.description = description;
@@ -51,4 +51,9 @@ public class Version {
     private Integer projectId;
     private String name;
     private String description;
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

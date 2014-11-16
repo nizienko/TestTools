@@ -5,11 +5,11 @@ package TestTools.database.project;
  */
 public class Project {
 
-    public Project(){
+    public Project() {
 
     }
 
-    public Project(String name, String description){
+    public Project(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -41,4 +41,9 @@ public class Project {
     private Integer id;
     private String name;
     private String description;
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

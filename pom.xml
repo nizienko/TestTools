@@ -10,7 +10,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.3.3</vaadin.version>
+        <vaadin.version>7.3.4</vaadin.version>
         <spring.version>4.1.1.RELEASE</spring.version>
     </properties>
 
@@ -24,7 +24,33 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
+            <!-- vaadin update widgetset -->
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
 
+                <configuration>
+                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                    <webappDirectory>${basedir}/target/VAADIN/widgetsets</webappDirectory>
+                    <hostedWebapp>${basedir}/target/VAADIN/widgetsets</hostedWebapp>
+                    <force>false</force>
+                    <strict>true</strict>
+                    <noServer>true</noServer>
+                    <compileReport>true</compileReport>
+                    <style>OBF</style>
+                    <runTarget>http://localhost:8080/</runTarget>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>resources</goal>
+                            <goal>update-widgetset</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Compiles your custom GWT components with the GWT compiler -->
             <!-- A hosted mode browser for client-side widget debugging can be run with the goal gwt:run after uncommenting the
               correct line below. A remote debugger can then be connected to port 8998. Note that e.g. a Jetty server should be running
@@ -108,9 +134,9 @@
             <version>${vaadin.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.vaadin.addons</groupId>
-            <artifactId>icepush</artifactId>
-            <version>0.5.5</version>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-maven-plugin</artifactId>
+            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -162,6 +188,11 @@
             <groupId>org.peimari</groupId>
             <artifactId>dawn</artifactId>
             <version>2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>reindeermods</artifactId>
+            <version>0.2</version>
         </dependency>
         <dependency>
             <groupId>jdom</groupId>

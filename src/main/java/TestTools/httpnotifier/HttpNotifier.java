@@ -16,7 +16,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by def on 07.11.14.
@@ -114,11 +117,11 @@ public class HttpNotifier {
         }
     }
 
-    public String sendXml(String url, String xml){
+    public String sendXml(String url, String xml) {
         return "";
     }
 
-    public String sendPostCA(String url, Map<String, String> params, String cert, String passkey){
+    public String sendPostCA(String url, Map<String, String> params, String cert, String passkey) {
         return "";
     }
 }

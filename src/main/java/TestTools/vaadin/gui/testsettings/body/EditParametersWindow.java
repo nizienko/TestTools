@@ -4,8 +4,6 @@ package TestTools.vaadin.gui.testsettings.body;
 import TestTools.core.MainApp;
 import TestTools.database.DaoContainer;
 import TestTools.database.testsettings.TestParameter;
-import TestTools.database.testsettings.TestSetting;
-import TestTools.vaadin.gui.testcases.body.TestCaseEditWindow;
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -120,7 +118,7 @@ public class EditParametersWindow extends Window {
             Button delete = new Button("Delete");
             delete.addClickListener(new Button.ClickListener() {
                 public void buttonClick(Button.ClickEvent clickEvent) {
-                    if (really.getValue()){
+                    if (really.getValue()) {
                         try {
                             daoContainer.getTestSettingDao().deleteParameter(testParameter);
                             Notification.show(name.getValue() + " deleted",
@@ -130,8 +128,7 @@ public class EditParametersWindow extends Window {
                             e.printStackTrace();
                             Notification.show("Error", Notification.Type.ERROR_MESSAGE);
                         }
-                    }
-                    else {
+                    } else {
                         Notification.show("You are not sure",
                                 Notification.Type.WARNING_MESSAGE);
                     }

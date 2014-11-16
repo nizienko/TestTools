@@ -1,8 +1,6 @@
 package TestTools.database.testexecution;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by def on 03.11.14.

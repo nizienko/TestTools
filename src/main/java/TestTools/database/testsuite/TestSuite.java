@@ -40,4 +40,9 @@ public class TestSuite {
     private Integer projectId;
     private String testSuiteName;
     private String description;
+
+    @Override
+    public String toString() {
+        return this.getTestSuiteName();
+    }
 }

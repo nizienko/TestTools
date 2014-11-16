@@ -12,7 +12,7 @@ public class TestResultsLayout extends GridLayout {
     private TestResultsBodyLayout bodyLayout;
 
     public TestResultsLayout() {
-        super(1,2);
+        super(1, 2);
         this.setRowExpandRatio(1, 1);
         bodyLayout = new TestResultsBodyLayout();
         headLayout = new TestResultsHeadLayout(bodyLayout);

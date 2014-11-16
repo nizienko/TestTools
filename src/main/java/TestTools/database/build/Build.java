@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class Build {
 
-    public Build(){
+    public Build() {
 
     }
 
@@ -35,6 +35,7 @@ public class Build {
     public void setVersionId(Integer versionId) {
         this.versionId = versionId;
     }
+
     public String getName() {
         return name;
     }
@@ -82,4 +83,9 @@ public class Build {
     private Date givenDt;
     private Date estimatedDt;
     private Date finishedDt;
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

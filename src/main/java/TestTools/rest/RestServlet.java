@@ -57,15 +57,14 @@ public abstract class RestServlet extends HttpServlet {
         return jsonObject.toString();
     }
 
-    protected String buildXMLAnswer(Document doc){
+    protected String buildXMLAnswer(Document doc) {
         StringWriter result = new StringWriter();
         try {
 
             XMLOutputter serializer = new XMLOutputter();
             serializer.setFormat(Format.getPrettyFormat());
             serializer.output(doc, result);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.err.println(e);
         }
         return result.toString();

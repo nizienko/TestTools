@@ -8,7 +8,6 @@ import java.util.List;
  */
 public class TestCase {
     private Integer id;
-    private Integer testSuiteId;
     private String name;
     private String description;
     private ArrayList<Integer> labelId;
@@ -29,14 +28,6 @@ public class TestCase {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getTestSuiteId() {
-        return testSuiteId;
-    }
-
-    public void setTestSuiteId(Integer testSuiteId) {
-        this.testSuiteId = testSuiteId;
     }
 
     public String getName() {
@@ -71,5 +62,8 @@ public class TestCase {
         this.issue = issue;
     }
 
-
+    @Override
+    public String toString() {
+        return this.getIssue() + " " + this.getName();
+    }
 }

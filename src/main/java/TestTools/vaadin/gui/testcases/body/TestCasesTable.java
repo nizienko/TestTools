@@ -1,12 +1,9 @@
 package TestTools.vaadin.gui.testcases.body;
 
-import TestTools.Settings;
 import TestTools.core.MainApp;
 import TestTools.database.DaoContainer;
 import TestTools.database.testcase.TestCase;
-import TestTools.database.testexecution.TestExecution;
 import com.vaadin.data.Property;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
