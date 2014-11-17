@@ -10,8 +10,11 @@ import TestTools.database.version.Version;
 import TestTools.vaadin.gui.MySelect;
 import TestTools.vaadin.gui.testresults.body.TestResultsBodyLayout;
 import com.vaadin.data.Property;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.*;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by def on 05.11.14.
@@ -30,6 +33,8 @@ public class TestResultsHeadLayout extends HorizontalLayout {
     private BuildExecution currentBuildExecution = null;
     private TestSuite currentTestSuite = null;
     private Button updateButton;
+    private DateField sinceDate;
+    private DateField toDate;
 
     public TestResultsHeadLayout(final TestResultsBodyLayout bodyLayout) {
         this.bodyLayout = bodyLayout;
@@ -39,6 +44,18 @@ public class TestResultsHeadLayout extends HorizontalLayout {
         for (Project project : daoContainer.getProjectDao().selectAll()) {
             projectSelect.addItem(project);
         }
+        testSuiteSelect = new MySelect();
+        testSuiteSelect.addValueChangeListener(new Property.ValueChangeListener() {
+            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+                try {
+                    currentTestSuite = (TestSuite) valueChangeEvent.getProperty().getValue();
+                } catch (NullPointerException e) {
+                    currentTestSuite = null;
+                }
+                showExecutions();
+            }
+        });
+        this.addComponent(testSuiteSelect);
 
         versionSelect = new MySelect();
         this.addComponent(versionSelect);
@@ -120,35 +137,39 @@ public class TestResultsHeadLayout extends HorizontalLayout {
                 showExecutions();
             }
         });
-        testSuiteSelect = new MySelect();
-        testSuiteSelect.addValueChangeListener(new Property.ValueChangeListener() {
-            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                try {
-                    currentTestSuite = (TestSuite) valueChangeEvent.getProperty().getValue();
-                } catch (NullPointerException e) {
-                    currentTestSuite = null;
-                }
-                showExecutions();
-            }
-        });
 
+        sinceDate = new DateField();
+        toDate = new DateField();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 1);
+        toDate.setValue(calendar.getTime());
+        calendar.add(Calendar.DATE, -7);
+        sinceDate.setValue(calendar.getTime());
+        sinceDate.setResolution(Resolution.MINUTE);
+        toDate.setResolution(Resolution.MINUTE);
+        this.addComponent(sinceDate);
+        this.addComponent(toDate);
         updateButton = new Button("update");
-
         updateButton.addClickListener(new Button.ClickListener() {
             public void buttonClick(Button.ClickEvent clickEvent) {
                 showExecutions();
             }
         });
         this.addComponent(updateButton);
-        this.addComponent(testSuiteSelect);
     }
 
     private void showExecutions() {
-        bodyLayout.updateLatestTests(daoContainer.getTestExecutionDao().selectExecutions(
-                currentProject,
-                currentVersion,
-                currentBuild,
-                currentBuildExecution,
-                currentTestSuite));
+        try {
+            bodyLayout.updateLatestTests(daoContainer.getTestExecutionDao().selectExecutions(
+                    currentProject,
+                    currentVersion,
+                    currentBuild,
+                    currentBuildExecution,
+                    currentTestSuite,
+                    sinceDate.getValue(),
+                    toDate.getValue()));
+        } catch (NullPointerException e) {
+            Notification.show("Incorrect data", Notification.Type.ERROR_MESSAGE);
+        }
     }
 }

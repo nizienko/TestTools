@@ -26,8 +26,6 @@ public class LatestTestsLayout extends VerticalLayout {
         table.addContainerProperty("Name", String.class, null);
         table.addContainerProperty("Date", String.class, null);
         table.addContainerProperty("Status", String.class, null);
-        DaoContainer daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
-        updateLatestTests(daoContainer.getTestExecutionDao().selectExecutions(null, null, null, null, null));
         this.addComponent(table);
     }
 
