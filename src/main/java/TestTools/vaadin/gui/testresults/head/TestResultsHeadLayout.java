@@ -14,7 +14,6 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by def on 05.11.14.
@@ -35,6 +34,7 @@ public class TestResultsHeadLayout extends HorizontalLayout {
     private Button updateButton;
     private DateField sinceDate;
     private DateField toDate;
+    private CheckBox grouped;
 
     public TestResultsHeadLayout(final TestResultsBodyLayout bodyLayout) {
         this.bodyLayout = bodyLayout;
@@ -156,18 +156,31 @@ public class TestResultsHeadLayout extends HorizontalLayout {
             }
         });
         this.addComponent(updateButton);
+        grouped = new CheckBox("Group");
+        this.addComponent(grouped);
     }
 
     private void showExecutions() {
         try {
-            bodyLayout.updateLatestTests(daoContainer.getTestExecutionDao().selectExecutions(
-                    currentProject,
-                    currentVersion,
-                    currentBuild,
-                    currentBuildExecution,
-                    currentTestSuite,
-                    sinceDate.getValue(),
-                    toDate.getValue()));
+            if (grouped.getValue()) {
+                bodyLayout.updateGroupedTests(daoContainer.getTestExecutionDao().selectGroupedExecutions(
+                        currentProject,
+                        currentVersion,
+                        currentBuild,
+                        currentBuildExecution,
+                        currentTestSuite,
+                        sinceDate.getValue(),
+                        toDate.getValue()));
+            } else {
+                bodyLayout.updateLatestTests(daoContainer.getTestExecutionDao().selectExecutions(
+                        currentProject,
+                        currentVersion,
+                        currentBuild,
+                        currentBuildExecution,
+                        currentTestSuite,
+                        sinceDate.getValue(),
+                        toDate.getValue()));
+            }
         } catch (NullPointerException e) {
             Notification.show("Incorrect data", Notification.Type.ERROR_MESSAGE);
         }

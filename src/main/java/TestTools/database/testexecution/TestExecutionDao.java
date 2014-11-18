@@ -91,7 +91,6 @@ public class TestExecutionDao extends AbstractDao {
         }
         if (isFirstParameter) {
             SQL.append(" where");
-            isFirstParameter = false;
         } else {
             SQL.append(" and");
         }
@@ -101,7 +100,7 @@ public class TestExecutionDao extends AbstractDao {
         return jdbcTemplate.query(SQL.toString(), new Object[]{}, new TestExecutionWithNamesMapper());
     }
 
-    public List<TestExecution> selectGroupedExecutions(
+    public List<GroupedTestExecution> selectGroupedExecutions(
             Project project,
             Version version,
             Build build,
@@ -110,39 +109,49 @@ public class TestExecutionDao extends AbstractDao {
             Date sinceDate,
             Date toDate) {
         boolean isFirstParameter = true;
-        StringBuffer SQL = new StringBuffer();
-        SQL.append("select tc.issue issue, tc.name testcase, p.name project, v.name version, b.name build, be.name execution, te.execution_dt dt, te.status_id status \n" +
-                "from testexecution te join buildexecution be on te.buildexecution_id=be.id join build b on be.build_id=b.id join version v on b.version_id=v.id join project p on v.project_id=p.id join testcase tc on te.testcase_id=tc.id");
+        String SQL = "select tc.issue issue, tc.name name, r.passed passed, r.failed failed from testcase tc ${JOIN} \n" +
+                "(select p.testcase_id, p.passed passed, f.failed failed from \n" +
+                "(select testcase_id, count(*) passed from testexecution where status_id=1 ${PREDICTION} group by testcase_id) p left outer join\n" +
+                "(select testcase_id, count(*) failed from testexecution where status_id=0 ${PREDICTION} group by testcase_id) f\n" +
+                "on p.testcase_id=f.testcase_id " +
+                "UNION select p.testcase_id, p.passed passed, f.failed failed from \n" +
+                "(select testcase_id, count(*) passed from testexecution where status_id=0 ${PREDICTION} group by testcase_id) p left outer join\n" +
+                "(select testcase_id, count(*) failed from testexecution where status_id=1 ${PREDICTION} group by testcase_id) f\n" +
+                "on p.testcase_id=f.testcase_id" +
+                ") r\n" +
+                "on tc.id=r.testcase_id";
+        StringBuffer prediction = new StringBuffer("and buildexecution_id in (select be.id \n" +
+                "from  buildexecution be \n" +
+                "join build b on be.build_id=b.id \n" +
+                "join version v on b.version_id=v.id \n" +
+                "join project p on v.project_id=p.id");
         if (project != null) {
-            SQL.append(getParameterString("p.id", project.getId().toString(), isFirstParameter));
+            prediction.append(getParameterString("p.id", project.getId().toString(), isFirstParameter));
             isFirstParameter = false;
         }
         if (version != null) {
-            SQL.append(getParameterString("v.id", version.getId().toString(), isFirstParameter));
+            prediction.append(getParameterString("v.id", version.getId().toString(), isFirstParameter));
             isFirstParameter = false;
         }
         if (build != null) {
-            SQL.append(getParameterString("b.id", build.getId().toString(), isFirstParameter));
+            prediction.append(getParameterString("b.id", build.getId().toString(), isFirstParameter));
             isFirstParameter = false;
         }
         if (buildExecution != null) {
-            SQL.append(getParameterString("be.id", buildExecution.getId().toString(), isFirstParameter));
-            isFirstParameter = false;
+            prediction.append(getParameterString("be.id", buildExecution.getId().toString(), isFirstParameter));
         }
+        prediction.append(")");
+        prediction.append(" and execution_dt>='" + dateFormat.format(sinceDate) + "'");
+        prediction.append(" and execution_dt<='" + dateFormat.format(toDate) + "'");
+        SQL = SQL.replace("${PREDICTION}", prediction);
         if (testSuite != null) {
-            SQL.append(getParameterString("tc.id in (select testcase_id from testsuitecontent where testsuite_id", testSuite.getId() + ")", isFirstParameter));
-            isFirstParameter = false;
-        }
-        if (isFirstParameter) {
-            SQL.append(" where");
-            isFirstParameter = false;
+            SQL = SQL.replace("${JOIN}", "left join");
+            SQL = SQL + " where tc.id in (select testcase_id from testsuitecontent where testsuite_id=" + testSuite.getId() + ")";
         } else {
-            SQL.append(" and");
+            SQL = SQL.replace("${JOIN}", "join");
         }
-        SQL.append(" te.execution_dt>='" + dateFormat.format(sinceDate) + "'");
-        SQL.append(" and te.execution_dt<='" + dateFormat.format(toDate) + "'");
-        SQL.append(" order by te.execution_dt desc");
-        return jdbcTemplate.query(SQL.toString(), new Object[]{}, new TestExecutionWithNamesMapper());
+        System.out.println(SQL);
+        return jdbcTemplate.query(SQL, new Object[]{}, new GroupedTestExecutionMapper());
     }
 
     private String getParameterString(String parameter, String value, boolean isFirst) {

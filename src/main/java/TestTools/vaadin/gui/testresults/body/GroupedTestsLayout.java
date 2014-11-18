@@ -1,6 +1,6 @@
 package TestTools.vaadin.gui.testresults.body;
 
-
+import TestTools.database.testexecution.GroupedTestExecution;
 import TestTools.database.testexecution.TestExecution;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
@@ -8,12 +8,12 @@ import com.vaadin.ui.VerticalLayout;
 import java.util.List;
 
 /**
- * Created by nizienko on 05.11.14.
+ * Created by def on 19.11.14.
  */
-public class LatestTestsLayout extends VerticalLayout {
+public class GroupedTestsLayout extends VerticalLayout {
     private Table table;
 
-    public LatestTestsLayout() {
+    public GroupedTestsLayout() {
         this.setSizeFull();
         table = new Table();
         table.setWidth("100%");
@@ -23,26 +23,23 @@ public class LatestTestsLayout extends VerticalLayout {
         table.setImmediate(true);
         table.addContainerProperty("Issue", String.class, null);
         table.addContainerProperty("Name", String.class, null);
-        table.addContainerProperty("Date", String.class, null);
-        table.addContainerProperty("Status", String.class, null);
+        table.addContainerProperty("Passed", Integer.class, null);
+        table.addContainerProperty("Failed", Integer.class, null);
         this.addComponent(table);
     }
 
-    public void updateLatestTests(List<TestExecution> testExecutions) {
+    public void updateTests(List<GroupedTestExecution> groupedTestExecutions) {
         table.removeAllItems();
         int i = 1;
-        for (TestExecution te : testExecutions) {
-            String status = "failed";
-            if (te.getStatusId() == 1) {
-                status = "passed";
-            }
+        for (GroupedTestExecution te : groupedTestExecutions) {
             table.addItem(new Object[]{
-                    te.getTestCaseIssue(),
-                    te.getTestCaseName(),
-                    te.getExecutionDt().toString(),
-                    status
+                    te.getIssue(),
+                    te.getName(),
+                    te.getPassed(),
+                    te.getFailed()
             }, new Integer(i));
             i++;
         }
+
     }
 }

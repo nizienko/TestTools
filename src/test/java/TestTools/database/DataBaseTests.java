@@ -55,6 +55,6 @@ public class DataBaseTests {
     public void createSettingsTables() {
         // create tables
         DaoContainer daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
-        daoContainer.getTestSettingDao().createTable();
+        daoContainer.getTestExecutionDao().selectGroupedExecutions(null, null, null, null, null, new Date(), new Date());
     }
 }
