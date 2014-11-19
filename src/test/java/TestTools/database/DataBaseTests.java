@@ -3,11 +3,13 @@ package TestTools.database;
 import TestTools.core.MainApp;
 import TestTools.database.build.Build;
 import TestTools.database.project.Project;
+import TestTools.database.testexecution.GroupedTestExecution;
 import TestTools.database.version.Version;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -55,6 +57,9 @@ public class DataBaseTests {
     public void createSettingsTables() {
         // create tables
         DaoContainer daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
-        daoContainer.getTestExecutionDao().selectGroupedExecutions(null, null, null, null, null, new Date(), new Date());
+        List<GroupedTestExecution> g = daoContainer.getTestExecutionDao().selectGroupedExecutions(null, null, null, null, null, new Date(), new Date());
+        for (GroupedTestExecution gt : g){
+            System.out.println(gt.getName() + " " + gt.getPassed() + " " + gt.getFailed());
+        }
     }
 }
