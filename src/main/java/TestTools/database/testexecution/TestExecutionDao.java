@@ -146,7 +146,6 @@ public class TestExecutionDao extends AbstractDao {
         } else {
             SQL = SQL.replace("${JOIN}", "join");
         }
-        System.out.println("SQL---\n" + SQL);
         return jdbcTemplate.query(SQL, new Object[]{}, new GroupedTestExecutionMapper());
     }
 

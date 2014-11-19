@@ -45,6 +45,7 @@ public class NewTestSuiteWindow extends Window {
                     testSuite.setProjectId(project.getId());
                     try {
                         daoContainer.getTestSuiteDao().insert(testSuite);
+                        testSuite = daoContainer.getTestSuiteDao().selectByProjectAndName(project, testSuite.getTestSuiteName());
                         select.addItem(testSuite);
                         close();
                         Notification.show(testSuite.getTestSuiteName() + " saved.", Notification.Type.TRAY_NOTIFICATION);
