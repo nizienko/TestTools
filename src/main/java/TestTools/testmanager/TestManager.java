@@ -9,16 +9,23 @@ import TestTools.database.testexecution.TestExecution;
 import TestTools.database.testsettings.TestConfiguration;
 import TestTools.database.testsettings.TestSetting;
 import TestTools.database.version.Version;
+import TestTools.publisher.NotifyPublisherImpl;
+import TestTools.publisher.PublisherImpl;
+import org.apache.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by def on 06.11.14.
  */
-public class TestManager {
+public class TestManager implements NotifyPublisherImpl{
+    public static final Logger LOG = Logger.getLogger(TestManager.class);
+
     private DaoContainer daoContainer;
+    private ArrayList<PublisherImpl> publishers = new ArrayList<PublisherImpl>();
 
     public void setDaoContainer(DaoContainer daoContainer) {
         this.daoContainer = daoContainer;
@@ -33,6 +40,9 @@ public class TestManager {
                 project = new Project(te.getPtojectName(), "created by test issue " + te.getTestCaseIssue());
                 daoContainer.getProjectDao().insert(project);
                 project = daoContainer.getProjectDao().selectByName(te.getPtojectName());
+                for (PublisherImpl p : publishers){
+                    p.publicateProject(project);
+                }
             }
 
             Version version = null;
@@ -42,6 +52,9 @@ public class TestManager {
                 version = new Version(project.getId(), te.getVersionName(), "created by test issue " + te.getTestCaseIssue());
                 daoContainer.getVersionDao().insert(version);
                 version = daoContainer.getVersionDao().selectByProjectAndName(project, te.getVersionName());
+                for (PublisherImpl p : publishers){
+                    p.publicateVersion(project, version);
+                }
             }
 
             Build build = null;
@@ -51,6 +64,9 @@ public class TestManager {
                 build = new Build(version.getId(), te.getBuildName(), "created by test issue " + te.getTestCaseIssue(), new Date(), new Date(), new Date());
                 daoContainer.getBuildDao().insert(build);
                 build = daoContainer.getBuildDao().selectByVersionAndName(version, te.getBuildName());
+                for (PublisherImpl p : publishers){
+                    p.publicateBuild(project, version, build);
+                }
             }
             BuildExecution buildExecution = null;
             try {
@@ -59,22 +75,14 @@ public class TestManager {
                 buildExecution = new BuildExecution(build.getId(), te.getExecutionName());
                 daoContainer.getBuildExecutionDao().insert(buildExecution);
                 buildExecution = daoContainer.getBuildExecutionDao().selectByBuildAndName(build, te.getExecutionName());
+                for (PublisherImpl p : publishers){
+                    p.publicateBuildExecution(project, version, build, buildExecution);
+                }
             }
             TestCase testCase = null;
             try {
                 testCase = daoContainer.getTestCaseDao().selectByIssue(te.getTestCaseIssue());
             } catch (EmptyResultDataAccessException e) {
-                /*TestSuite testSuite;
-                try {
-                    testSuite = daoContainer.getTestSuiteDao().selectByProjectAndName(project, "default");
-                } catch (EmptyResultDataAccessException e2) {
-                    testSuite = new TestSuite();
-                    testSuite.setProjectId(project.getId());
-                    testSuite.setTestSuiteName("default");
-                    testSuite.setDescription("new tests created here");
-                    daoContainer.getTestSuiteDao().insert(testSuite);
-                    testSuite = daoContainer.getTestSuiteDao().selectByProjectAndName(project, "default");
-                }*/
                 testCase = new TestCase();
                 testCase.setIssue(te.getTestCaseIssue());
                 testCase.setName(te.getTestCaseName());
@@ -87,6 +95,9 @@ public class TestManager {
             te.setBuildExecutionId(buildExecution.getId());
             te.setExecutionDt(new Date());
             daoContainer.getTestExecutionDao().insert(te);
+            for (PublisherImpl p : publishers){
+                p.publicateTestExecution(project, version, build, buildExecution, te);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException("Error inserting test execution");
@@ -109,4 +120,7 @@ public class TestManager {
         }
     }
 
+    public void addPublisher(PublisherImpl publisher) {
+        publishers.add(publisher);
+    }
 }

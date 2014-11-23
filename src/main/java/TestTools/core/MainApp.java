@@ -1,6 +1,7 @@
 package TestTools.core;
 
 import TestTools.database.DaoContainer;
+import TestTools.publisher.Zephyr.ZephyrPublisher;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -26,6 +27,9 @@ public class MainApp {
             daoContainer.getTestSuiteDao().createTable();
             daoContainer.getVersionDao().createTable();
             daoContainer.getTestSettingDao().createTable();
+            ZephyrPublisher zephyrPublisher = (ZephyrPublisher) ctx.getBean("publisher");
+            Thread zephyrThread = new Thread(zephyrPublisher);
+            zephyrThread.start();
         }
         return ctx;
     }

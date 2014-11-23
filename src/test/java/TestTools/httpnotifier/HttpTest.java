@@ -25,14 +25,14 @@ public class HttpTest {
         HttpNotifier httpNotifier = (HttpNotifier) MainApp.getCtx().getBean("httpNotifier");
         int j = 1;
 //        for (int y = 0; y < 5; y++) {
-            for (int i = 50; i < 80; i++) {
+            for (int i = 130; i < 150; i++) {
                 Map params = new HashMap();
-                params.put("project", "penelope");
+                params.put("project", "skrat");
                 params.put("version", "3.37");
                 params.put("build", "12402");
                 params.put("execution", "functional");
                 params.put("status", (i + 11) % 2);
-                params.put("name", "Пенелопный тест " + i);
+                params.put("name", "Скрат тест " + i);
                 params.put("issue", "TC-" + i);
                 System.out.println(j + ". " + httpNotifier.sendPost(url, params));
                 j++;
@@ -40,7 +40,7 @@ public class HttpTest {
 //        }
     }
 
-    private final static String url = "http://jenkins-ot.test.yamoney.ru/ttools/rest/addtestexecution";
+    private final static String url = "http://localhost:8080/TestTools/rest/addtestexecution";
     private final static String addTestExecution1 = "http://localhost:8080/TestTools/rest/addtestexecution?project=penelope&version=3.45&build=123${i}&execution=integration&status=1&issue=TC-${i}&name=Тест-${i}";
     private final static String addTestExecution2 = "http://localhost:8080/TestTools/rest/addtestexecution?project=calypso&version=3.45&build=177${i}&execution=integration&status=1&issue=CK-${i}&name=Тест-${i}";
 
