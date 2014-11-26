@@ -8,6 +8,7 @@ import com.vaadin.ui.UI;
 /**
  * Created by def on 31.10.14.
  */
+
 public class MainUI extends UI {
 
     @Override
