@@ -12,12 +12,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
  * Created by nizienko on 13.11.14.
  */
 public class EditParametersWindow extends Window {
-    DaoContainer daoContainer;
-    Table table;
-    Button updateButton;
-    CheckBox really;
-    final String width = "600px";
-    final String width2 = "500px";
+    private DaoContainer daoContainer;
+    private Table table;
+    private Button updateButton;
+    private CheckBox really;
+    private final String width = "600px";
+    private final String width2 = "500px";
 
 
     public EditParametersWindow() {

@@ -27,6 +27,7 @@ public class MainApp {
             daoContainer.getTestSuiteDao().createTable();
             daoContainer.getVersionDao().createTable();
             daoContainer.getTestSettingDao().createTable();
+            daoContainer.getUserDao().createTable();
             ZephyrPublisher zephyrPublisher = (ZephyrPublisher) ctx.getBean("publisher");
             Thread zephyrThread = new Thread(zephyrPublisher);
             zephyrThread.start();
