@@ -21,6 +21,11 @@ public class UserDao extends AbstractDao {
                 "    \"level\" INTEGER NOT NULL\n" +
                 ");";
         jdbcTemplate.execute(SQL);
+        User root = new User();
+        root.setLogin("root");
+        root.setPassword("root");
+        root.setUserLevel(10);
+        insert(root);
     }
 
     public void insert(User user) {
