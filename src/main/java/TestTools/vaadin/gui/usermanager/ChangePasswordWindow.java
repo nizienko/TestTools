@@ -36,6 +36,7 @@ public class ChangePasswordWindow extends Window {
                             DaoContainer daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
                             user.setPassword(newPasswordField1.getValue());
                             daoContainer.getUserDao().updateUser(user);
+                            close();
                         }
                         else {
                             Notification.show("New password is empty",
