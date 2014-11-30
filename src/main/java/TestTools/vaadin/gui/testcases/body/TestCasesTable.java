@@ -4,7 +4,6 @@ import TestTools.core.MainApp;
 import TestTools.database.DaoContainer;
 import TestTools.database.testcase.TestCase;
 import com.vaadin.data.Property;
-import com.vaadin.event.ItemClickEvent;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;

@@ -25,6 +25,7 @@ public class DaoContainer {
     private VersionDao versionDao;
     private TestSettingDao testSettingDao;
     private UserDao userDao;
+    private JdbcTemplate jdbcTemplate;
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         buildDao = new BuildDao(jdbcTemplate);
@@ -36,6 +37,7 @@ public class DaoContainer {
         versionDao = new VersionDao(jdbcTemplate);
         testSettingDao = new TestSettingDao(jdbcTemplate);
         userDao = new UserDao(jdbcTemplate);
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public BuildDao getBuildDao() {
@@ -73,4 +75,6 @@ public class DaoContainer {
     public UserDao getUserDao() {
         return userDao;
     }
+
+    public JdbcTemplate getJdbcTemplate(){return jdbcTemplate;}
 }
