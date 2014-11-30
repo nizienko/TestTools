@@ -20,12 +20,14 @@ public class UserDao extends AbstractDao {
                 "    \"password\" TEXT NOT NULL,\n" +
                 "    \"level\" INTEGER NOT NULL\n" +
                 ");";
-        jdbcTemplate.execute(SQL);
-        User root = new User();
-        root.setLogin("root");
-        root.setPassword("root");
-        root.setUserLevel(10);
-        insert(root);
+        if (jdbcTemplate.queryForObject("select count(*) from user where level>9", Integer.class) == 0) {
+            jdbcTemplate.execute(SQL);
+            User root = new User();
+            root.setLogin("root");
+            root.setPassword("root");
+            root.setUserLevel(10);
+            insert(root);
+        }
     }
 
     public void insert(User user) {
