@@ -86,6 +86,7 @@ public class TestCasesHeadLayout extends HorizontalLayout {
                 }
             }
         });
+        updateButton.focus();
         addTestSuiteButton = new Button("Create test suite");
         this.addComponent(addTestSuiteButton);
         addTestSuiteButton.addClickListener(new Button.ClickListener() {

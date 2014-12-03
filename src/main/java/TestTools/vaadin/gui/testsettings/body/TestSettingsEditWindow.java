@@ -17,7 +17,7 @@ public class TestSettingsEditWindow extends Window {
     TestSetting testSetting;
 
     public TestSettingsEditWindow(final TestConfiguration testConfiguration, String parameter) {
-        super(testConfiguration.getName() + " " + parameter);
+        super(testConfiguration.getName());
         daoContainer = (DaoContainer) MainApp.getCtx().getBean("daoContainer");
         try {
             testSetting = daoContainer.getTestSettingDao().selectTestSetting(testConfiguration, parameter);
@@ -30,11 +30,16 @@ public class TestSettingsEditWindow extends Window {
         setWidth("400px");
         VerticalLayout content = new VerticalLayout();
         setContent(content);
+        final TextField parameterTextField = new TextField();
+        parameterTextField.setValue(testSetting.getParameterName());
+        parameterTextField.setReadOnly(true);
+        parameterTextField.setWidth("100%");
         final TextField valueTextField = new TextField();
         valueTextField.setValue(testSetting.getValue());
+        content.addComponent(parameterTextField);
         content.addComponent(valueTextField);
         content.addComponent(new Label(testSetting.getDescription()));
-        valueTextField.setWidth("400px");
+        valueTextField.setWidth("100%");
         Button save = new Button("Save");
         content.addComponent(save);
         save.addClickListener(new Button.ClickListener() {

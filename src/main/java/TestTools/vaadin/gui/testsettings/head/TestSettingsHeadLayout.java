@@ -36,6 +36,7 @@ public class TestSettingsHeadLayout extends HorizontalLayout {
         tkSelect = new MySelect();
         tkSelect.setNullSelectionAllowed(true);
         this.addComponent(tkSelect);
+        tkSelect.focus();
         parameterField = new TextField();
         this.addComponent(parameterField);
         updateButton = new Button("Update");
