@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class TestManager implements NotifyPublisherImpl{
     public static final Logger LOG = Logger.getLogger(TestManager.class);
-
+    private boolean isAlife = true;
     private DaoContainer daoContainer;
     private ArrayList<PublisherImpl> publishers = new ArrayList<PublisherImpl>();
 
@@ -123,4 +123,17 @@ public class TestManager implements NotifyPublisherImpl{
     public void addPublisher(PublisherImpl publisher) {
         publishers.add(publisher);
     }
+
+    public String getSetting(String name){
+        return daoContainer.getSystemSettingsDao().getSetting(name);
+    }
+
+    public boolean isAlife(){
+        return isAlife;
+    }
+
+    public void stop(){
+        isAlife = false;
+    }
+
 }

@@ -3,6 +3,9 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
     <display-name>Test tools</display-name>
+    <listener>
+        <listener-class>TestTools.core.ContextListener</listener-class>
+    </listener>
     <context-param>
         <description>Vaadin production mode</description>
         <param-name>productionMode</param-name>

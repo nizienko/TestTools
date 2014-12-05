@@ -2,7 +2,9 @@ package TestTools.core;
 
 import TestTools.database.DaoContainer;
 import TestTools.publisher.Zephyr.ZephyrPublisher;
+import TestTools.testmanager.TestManager;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -28,10 +30,17 @@ public class MainApp {
             daoContainer.getVersionDao().createTable();
             daoContainer.getTestSettingDao().createTable();
             daoContainer.getUserDao().createTable();
+            daoContainer.getSystemSettingsDao().createTable();
             ZephyrPublisher zephyrPublisher = (ZephyrPublisher) ctx.getBean("publisher");
             Thread zephyrThread = new Thread(zephyrPublisher);
             zephyrThread.start();
         }
         return ctx;
+    }
+
+    public synchronized static void stop(){
+        TestManager testManager = (TestManager) ctx.getBean("testManager");
+        testManager.stop();
+        ((ConfigurableApplicationContext) ctx).close();
     }
 }

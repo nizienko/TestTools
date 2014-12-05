@@ -1,9 +1,12 @@
 package TestTools.core;
 
+import org.apache.log4j.Logger;
+
 /**
  * Created by def on 23.11.14.
  */
 public abstract class AbstractDaemon implements Runnable {
+    public static final Logger LOG = Logger.getLogger(AbstractDaemon.class);
 
     private Integer period;
     private Boolean run;
@@ -15,6 +18,7 @@ public abstract class AbstractDaemon implements Runnable {
 
     public void stop(){
         run = false;
+        LOG.info("Stopping daemon");
     }
 
     protected abstract void process();

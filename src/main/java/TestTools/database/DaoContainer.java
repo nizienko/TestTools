@@ -3,6 +3,7 @@ package TestTools.database;
 import TestTools.database.build.BuildDao;
 import TestTools.database.buildexecution.BuildExecutionDao;
 import TestTools.database.project.ProjectDao;
+import TestTools.database.systemsettings.SystemSettingsDao;
 import TestTools.database.testcase.TestCaseDao;
 import TestTools.database.testexecution.TestExecutionDao;
 import TestTools.database.testsettings.TestSettingDao;
@@ -25,6 +26,7 @@ public class DaoContainer {
     private VersionDao versionDao;
     private TestSettingDao testSettingDao;
     private UserDao userDao;
+    private SystemSettingsDao systemSettingsDao;
     private JdbcTemplate jdbcTemplate;
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
@@ -37,6 +39,7 @@ public class DaoContainer {
         versionDao = new VersionDao(jdbcTemplate);
         testSettingDao = new TestSettingDao(jdbcTemplate);
         userDao = new UserDao(jdbcTemplate);
+        systemSettingsDao = new SystemSettingsDao(jdbcTemplate);
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -77,4 +80,8 @@ public class DaoContainer {
     }
 
     public JdbcTemplate getJdbcTemplate(){return jdbcTemplate;}
+
+    public SystemSettingsDao getSystemSettingsDao() {
+        return systemSettingsDao;
+    }
 }
