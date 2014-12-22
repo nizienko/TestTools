@@ -20,20 +20,7 @@ public class MainApp {
     public synchronized static ApplicationContext getCtx() {
         if (ctx == null) {
             ctx = new ClassPathXmlApplicationContext("Beans.xml");
-            DaoContainer daoContainer = (DaoContainer) ctx.getBean("daoContainer");
-            daoContainer.getBuildDao().createTable();
-            daoContainer.getBuildExecutionDao().createTable();
-            daoContainer.getProjectDao().createTable();
-            daoContainer.getTestCaseDao().createTable();
-            daoContainer.getTestExecutionDao().createTable();
-            daoContainer.getTestSuiteDao().createTable();
-            daoContainer.getVersionDao().createTable();
-            daoContainer.getTestSettingDao().createTable();
-            daoContainer.getUserDao().createTable();
-            daoContainer.getSystemSettingsDao().createTable();
-            ZephyrPublisher zephyrPublisher = (ZephyrPublisher) ctx.getBean("publisher");
-            Thread zephyrThread = new Thread(zephyrPublisher);
-            zephyrThread.start();
+            init();
         }
         return ctx;
     }
@@ -42,5 +29,22 @@ public class MainApp {
         TestManager testManager = (TestManager) ctx.getBean("testManager");
         testManager.stop();
         ((ConfigurableApplicationContext) ctx).close();
+    }
+
+    private static void init(){
+        DaoContainer daoContainer = (DaoContainer) ctx.getBean("daoContainer");
+        daoContainer.getBuildDao().createTable();
+        daoContainer.getBuildExecutionDao().createTable();
+        daoContainer.getProjectDao().createTable();
+        daoContainer.getTestCaseDao().createTable();
+        daoContainer.getTestExecutionDao().createTable();
+        daoContainer.getTestSuiteDao().createTable();
+        daoContainer.getVersionDao().createTable();
+        daoContainer.getTestSettingDao().createTable();
+        daoContainer.getUserDao().createTable();
+        daoContainer.getSystemSettingsDao().createTable();
+
+        // Starting zephyr publisher
+        new Thread((ZephyrPublisher) ctx.getBean("publisher")).start();
     }
 }

@@ -37,17 +37,17 @@ public class ZephyrPublisher extends AbstractDaemon implements PublisherImpl {
 
     public void setTestManager(TestManager testManager){
         this.testManager = testManager;
-        testManager.addPublisher(this);
         try {
-        zapiUtils = new ZAPIUtils(testManager.getSetting("jira.url"), testManager.getSetting("jira.account"));
-        project = testManager.getSetting("jira.project");
+            zapiUtils = new ZAPIUtils(testManager.getSetting("jira.url"), testManager.getSetting("jira.account"));
+            project = testManager.getSetting("jira.project");
+            testManager.addPublisher(this);
         }
         catch (Exception e) {
             LOG.error("Can't load system settings: jira.url, jira.account, jira.project. Check them.");
             super.stop();
         }
-        versionList = zapiUtils.getJiraVersions("TC");
-        LOG.info(versionList);
+/*        versionList = zapiUtils.getJiraVersions("TC");
+        LOG.info(versionList);*/
     }
 
     @Override
