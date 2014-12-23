@@ -24,8 +24,9 @@ public class ZephyrPublisher extends AbstractDaemon implements PublisherImpl {
     private Queue<Cycle> cyclesQueue;
     private Queue<TestExecution> testsQueue;
     private TestManager testManager;
-    private ZAPIUtils zapiUtils;
+    private ZAPIActions zapiActions;
     private String project;
+    private String jiraVersion;
     private ArrayList<HashMap<String, String>> versionList;
 
     public ZephyrPublisher(Integer period) {
@@ -38,33 +39,35 @@ public class ZephyrPublisher extends AbstractDaemon implements PublisherImpl {
     public void setTestManager(TestManager testManager){
         this.testManager = testManager;
         try {
-            zapiUtils = new ZAPIUtils(testManager.getSetting("jira.url"), testManager.getSetting("jira.account"));
-            project = testManager.getSetting("jira.project");
+            zapiActions = new ZAPIActions(testManager);
             testManager.addPublisher(this);
         }
         catch (Exception e) {
-            LOG.error("Can't load system settings: jira.url, jira.account, jira.project. Check them.");
+            e.printStackTrace();
+            LOG.error(e.getMessage());
             super.stop();
         }
-/*        versionList = zapiUtils.getJiraVersions("TC");
-        LOG.info(versionList);*/
     }
 
     @Override
     protected void process() {
-        LOG.info("Process");
+        LOG.info("Products in queue: " + productsQueue.size());
         while( !productsQueue.isEmpty() ){
             Product newProduct = productsQueue.remove();
             LOG.info("Inserting project " + newProduct.getName());
+            zapiActions.publicateProduct(newProduct);
         }
+        LOG.info("Cycles in queue: " + cyclesQueue.size());
         while( !cyclesQueue.isEmpty() ){
             Cycle newCycle = cyclesQueue.remove();
             LOG.info("Inserting cycle " + newCycle.getName());
+            zapiActions.publicateCycle(newCycle);
         }
+        LOG.info("Tests in queue: " + testsQueue.size());
         while( !testsQueue.isEmpty() ){
             TestExecution newTest = testsQueue.remove();
             LOG.info("Inserting test " + newTest.getTestCaseName());
-
+            zapiActions.publicateTest(newTest);
         }
         try {
             if (!testManager.isAlife()){

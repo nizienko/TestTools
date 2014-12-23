@@ -61,7 +61,7 @@ public class ZAPIUtils {
         }
     }
 
-    public void createVersion(String name, String projectKey) {
+    public String createVersion(String name, String projectKey) {
         String request = "{\n" +
                 "    \"description\": \"\",\n" +
                 "    \"name\": \"" + name + "\",\n" +
@@ -70,6 +70,7 @@ public class ZAPIUtils {
                 "    \"project\": \"" + projectKey + "\"\n" +
                 "}";
         String result = makePost(jira + "version", request);
+        return result;
     }
 
     public ArrayList<HashMap<String, String>> getCycles(String project, String version) {
@@ -104,7 +105,7 @@ public class ZAPIUtils {
         }
     }
 
-    public void createCycle(String project, String version, String name, String versionName) {
+    public String createCycle(String project, String version, String name, String versionName) {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
         Date now = new Date();
         Date tommorow = new Date(now.getTime() + (1000 * 60 * 60 * 24));
@@ -121,6 +122,7 @@ public class ZAPIUtils {
                 "    \"versionId\": \"" + version + "\"\n" +
                 "}";
         String result = makePost(zephyr + "cycle", request);
+        return result;
     }
 
     public void addTestsToCycle(String tests, String versionId, String cycleId, String projectId) {
