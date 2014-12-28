@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -22,6 +23,7 @@ import java.util.*;
  * Created by nizienko on 05.12.14.
  */
 public class ZAPIUtils {
+    public static final Logger LOG = Logger.getLogger(ZAPIUtils.class);
     private CloseableHttpClient httpClient = CloseableHttpClientFactory.getInstance().createHttpClient();
     String zephyr;
     String authorizationPair;
@@ -38,7 +40,7 @@ public class ZAPIUtils {
             String result = makeGet(zephyr + "util/versionBoard-list?projectId=" + project);
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject) parser.parse(result);
-            ArrayList<HashMap<String, String>> rs = (ArrayList<HashMap<String, String>>) jsonObject.get("versionOptions");
+            ArrayList<HashMap<String, String>> rs = (ArrayList<HashMap<String, String>>) jsonObject.get("unreleasedVersions");
             return rs;
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,7 +51,6 @@ public class ZAPIUtils {
 
     public ArrayList<HashMap<String, String>> getJiraVersions(String projectKey) {
         try {
-
             ArrayList<HashMap<String, String>> resArrayList = new ArrayList<HashMap<String, String>>();
             String result = makeGet(jira + "project/" + projectKey + "/versions");
             JSONParser parser = new JSONParser();
@@ -75,7 +76,6 @@ public class ZAPIUtils {
 
     public ArrayList<HashMap<String, String>> getCycles(String project, String version) {
         try {
-
             ArrayList<HashMap<String, String>> resArrayList = new ArrayList<HashMap<String, String>>();
             String result = makeGet(zephyr + "cycle?projectId=" + project + "&versionId=" + version + "&offset=0");
             JSONParser parser = new JSONParser();
@@ -106,7 +106,7 @@ public class ZAPIUtils {
     }
 
     public String createCycle(String project, String version, String name, String versionName) {
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yy");
         Date now = new Date();
         Date tommorow = new Date(now.getTime() + (1000 * 60 * 60 * 24));
 
@@ -121,17 +121,18 @@ public class ZAPIUtils {
                 "    \"projectId\": \"" + project + "\",\n" +
                 "    \"versionId\": \"" + version + "\"\n" +
                 "}";
+        LOG.info(request);
         String result = makePost(zephyr + "cycle", request);
         return result;
     }
 
-    public void addTestsToCycle(String tests, String versionId, String cycleId, String projectId) {
-        if (!"".equals(tests)) {
-            String issueList = tests.substring(0, tests.toString().length() - 2);
-            System.out.println("adding issue list to cycleId '" + cycleId + "': " + issueList);
+    public void addTestsToCycle(String test, String versionId, String cycleId, String projectId) {
+        if (!"".equals(test)) {
+//            String issueList = tests.substring(0, tests.toString().length() - 2);
+            System.out.println("adding issue list to cycleId '" + cycleId + "': " + test);
             String request = "{\n" +
                     "    \"issues\": [\n" +
-                    "        " + issueList + "\n" +
+                    "        \"" + test + "\"\n" +
                     "    ],\n" +
                     "    \"versionId\": \"" + versionId + "\",\n" +
                     "    \"cycleId\": \"" + cycleId + "\",\n" +
@@ -142,16 +143,6 @@ public class ZAPIUtils {
         }
     }
 
-    public void addTestsToCycleIfNotExist(ArrayList<HashMap<String, String>> tests, String version, String cycleName, String projectId) {
-        try {
-            ArrayList<HashMap<String, String>> resArrayList = new ArrayList<HashMap<String, String>>();
-            String zqlQuery = "cycleName = '" + cycleName + "' and fixVersion = '" + version + "'";
-            String result = makeGet(zephyr + "zql/executeSearch?zqlQuery=" + URLEncoder.encode(zqlQuery
-                    .replace("Ad hoc", "Adhoc"), "UTF-8") + "&maxRecords=10000");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public ArrayList<HashMap<String, String>> getExecutions(String cycleName, String version) {
         try {
@@ -175,9 +166,9 @@ public class ZAPIUtils {
                     executionHashMap.put("issueKey", execution.get("issueKey").toString());
                     executionHashMap.put("issueSummary", execution.get("issueSummary").toString());
                     executionHashMap.put("priority", execution.get("priority").toString());
-                    executionHashMap.put("component", execution.get("component").toString());
+//                    executionHashMap.put("component", execution.get("component").toString());
                     executionHashMap.put("versionId", execution.get("versionId").toString());
-                    executionHashMap.put("version", execution.get("version").toString());
+//                    executionHashMap.put("version", execution.get("version").toString());
                     executionHashMap.put("statusId", status.get("id").toString());
                     executionHashMap.put("statusName", status.get("name").toString());
                     executionHashMap.put("description", status.get("description").toString());
@@ -198,7 +189,7 @@ public class ZAPIUtils {
         makePost(zephyr + "execution/" + id + "/quickExecute", request);
     }
 
-    public void execute(String id, String status, String comment) {
+    public void execute(String id, Integer status, String comment) {
         String request = "{\n" +
                 "\"status\": " + status + ",\n" +
                 "\"comment\": \"" + comment + "\"\n" +
@@ -211,15 +202,16 @@ public class ZAPIUtils {
         HttpGet httpget = new HttpGet(cmd);
         httpget.setHeader("Content-Type", "application/json; charset=UTF-8");
         httpget.setHeader("Authorization", "Basic " + authorizationPair);
+        LOG.info("GET: " + cmd);
         try {
             HttpResponse response = httpClient.execute(httpget);
             try {
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
             StringBuffer responseBody = new StringBuffer();
-            String line = "";
+            String line;
             while ((line = rd.readLine()) != null) {
                 responseBody.append(line + "\r\n");
+                LOG.info("   res:" + line);
             }
             return responseBody.toString();
             }
@@ -249,6 +241,7 @@ public class ZAPIUtils {
                 StringBuffer responseBody = new StringBuffer();
                 String line = "";
                 while ((line = rd.readLine()) != null) {
+                    LOG.info("   post: " + line);
                     responseBody.append(line + "\r\n");
                 }
                 return responseBody.toString();
@@ -278,6 +271,7 @@ public class ZAPIUtils {
                 StringBuffer responseBody = new StringBuffer();
                 String line = "";
                 while ((line = rd.readLine()) != null) {
+                    LOG.info("  put: " + line);
                     responseBody.append(line + "\r\n");
                 }
                 return responseBody.toString();

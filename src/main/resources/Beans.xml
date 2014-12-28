@@ -33,7 +33,7 @@
     </bean>
 
     <bean id="publisher" class="TestTools.publisher.Zephyr.ZephyrPublisher">
-        <constructor-arg type="Integer" value="60"/>
+        <constructor-arg type="Integer" value="10"/>
         <property name="testManager" ref="testManager"/>
     </bean>
 
