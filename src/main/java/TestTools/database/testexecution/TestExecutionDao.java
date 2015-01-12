@@ -112,8 +112,8 @@ public class TestExecutionDao extends AbstractDao {
         String SQL = "select tc.issue issue, tc.name name, r.passed passed, r.failed failed from testcase tc ${JOIN} \n" +
                 "(select t.testcase_id, p.passed passed, f.failed failed from \n" +
                 "(select testcase_id, count(*) total from testexecution where 1=1 ${PREDICTION} group by testcase_id) t left outer join\n" +
-                "(select testcase_id, count(*) passed from testexecution where status_id=1 ${PREDICTION} group by testcase_id) p on t.testcase_id=p.testcase_id left outer join\n" +
-                "(select testcase_id, count(*) failed from testexecution where status_id=0 ${PREDICTION} group by testcase_id) f\n" +
+                "(select testcase_id, count(*) passed from testexecution where status_id=5 ${PREDICTION} group by testcase_id) p on t.testcase_id=p.testcase_id left outer join\n" +
+                "(select testcase_id, count(*) failed from testexecution where status_id=6 ${PREDICTION} group by testcase_id) f\n" +
                 "on t.testcase_id=f.testcase_id) r\n" +
                 "on tc.id=r.testcase_id";
         StringBuffer prediction = new StringBuffer("and buildexecution_id in (select be.id \n" +

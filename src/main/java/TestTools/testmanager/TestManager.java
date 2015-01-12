@@ -125,7 +125,12 @@ public class TestManager implements NotifyPublisherImpl{
     }
 
     public String getSetting(String name){
-        return daoContainer.getSystemSettingsDao().getSetting(name);
+        try {
+            return daoContainer.getSystemSettingsDao().getSetting(name);
+        }
+        catch (EmptyResultDataAccessException e) {
+            throw new IllegalStateException("Can't load " + name);
+        }
     }
 
     public boolean isAlife(){

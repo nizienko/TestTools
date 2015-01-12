@@ -33,7 +33,7 @@ public class LatestTestsLayout extends VerticalLayout {
         int i = 1;
         for (TestExecution te : testExecutions) {
             String status = "failed";
-            if (te.getStatusId() == 1) {
+            if (te.getStatusId() == 5) {
                 status = "passed";
             }
             table.addItem(new Object[]{

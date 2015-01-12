@@ -31,7 +31,8 @@ public class ZAPIActions {
             cylces = new HashMap<String, ArrayList<HashMap<String, String>>>();
             issues = new HashMap<Integer, ArrayList<HashMap<String, String>>>();
         }
-        catch (NullPointerException e){
+        catch (Exception e){
+            LOG.error(e.getMessage());
             throw new IllegalStateException("Can't load system settings: jira.url, jira.account, jira.project, jira.project.key. Check them.");
         }
     }
@@ -50,10 +51,15 @@ public class ZAPIActions {
 
     private boolean isProductExist(Product product){
         boolean isExist = false;
+        try {
         for (HashMap<String, String> version : products) {
             if (version.get("label").equals(product.getName())) {
                 isExist = true;
             }
+        }
+        }
+        catch (NullPointerException e){
+            isExist = false;
         }
         return isExist;
     }

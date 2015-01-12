@@ -143,7 +143,7 @@ public class TestResultsHeadLayout extends HorizontalLayout {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR, 1);
         toDate.setValue(calendar.getTime());
-        calendar.add(Calendar.DATE, -7);
+        calendar.add(Calendar.HOUR, -5);
         sinceDate.setValue(calendar.getTime());
         sinceDate.setResolution(Resolution.MINUTE);
         toDate.setResolution(Resolution.MINUTE);
@@ -158,6 +158,7 @@ public class TestResultsHeadLayout extends HorizontalLayout {
         this.addComponent(updateButton);
         grouped = new CheckBox("Group");
         this.addComponent(grouped);
+        showExecutions();
     }
 
     private void showExecutions() {

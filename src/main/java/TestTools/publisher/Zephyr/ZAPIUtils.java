@@ -40,7 +40,7 @@ public class ZAPIUtils {
             String result = makeGet(zephyr + "util/versionBoard-list?projectId=" + project);
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject) parser.parse(result);
-            ArrayList<HashMap<String, String>> rs = (ArrayList<HashMap<String, String>>) jsonObject.get("unreleasedVersions");
+            ArrayList<HashMap<String, String>> rs = (ArrayList<HashMap<String, String>>) jsonObject.get("versionOptions"); // unreleasedVersions
             return rs;
         } catch (Exception e) {
             e.printStackTrace();
