@@ -2,8 +2,10 @@ package TestTools.vaadin.gui.testresults.body;
 
 import TestTools.database.testexecution.GroupedTestExecution;
 import TestTools.database.testexecution.TestExecution;
+import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
  */
 public class GroupedTestsLayout extends VerticalLayout {
     private Table table;
+    public static final Logger LOG = Logger.getLogger(GroupedTestsLayout.class);
 
     public GroupedTestsLayout() {
         this.setSizeFull();
@@ -26,6 +29,35 @@ public class GroupedTestsLayout extends VerticalLayout {
         table.addContainerProperty("Passed", Integer.class, null);
         table.addContainerProperty("Failed", Integer.class, null);
         this.addComponent(table);
+        table.setCellStyleGenerator(new Table.CellStyleGenerator() {
+            @Override
+            public String getStyle(Table source, Object itemId, Object propertyId) {
+                if(propertyId != null ) {
+                    Item item = source.getItem(itemId);
+                    Integer passed = (Integer) item.getItemProperty("Passed").getValue();
+                    Integer failed = (Integer) item.getItemProperty("Failed").getValue();
+                    LOG.info(passed + " " + failed);
+                    if ((passed > 0) & failed == 0 ){
+                        return "passed";
+                    }
+                    if ((passed > 0) & (failed > 0 )){
+                        return "passed_sometimes";
+                    }
+                    if ((passed == 0) & (failed > 0)){
+                        return "failed";
+                    }
+                    if ((passed == 0) & (failed == 0)){
+                        return "not_run";
+                    }
+                    return null;
+                }
+                else {
+                    LOG.info("Property id is null");
+                    return null;
+                }
+            }
+        });
+
     }
 
     public void updateTests(List<GroupedTestExecution> groupedTestExecutions) {

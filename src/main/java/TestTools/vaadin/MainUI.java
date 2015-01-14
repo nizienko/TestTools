@@ -13,7 +13,9 @@ public class MainUI extends UI {
 
     @Override
     public void init(VaadinRequest request) {
-        this.setTheme("dawn");
+        this.setTheme("test-tools-default");
+//        this.setTheme("liferay");
+
         AppLayout appLayout = new AppLayout();
         this.setContent(appLayout);
 

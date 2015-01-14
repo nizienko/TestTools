@@ -1,0 +1,17 @@
+@import "../runo/styles.css";
+
+.v-table-cell-content-passed {
+    background: #33BB00;
+}
+
+.v-table-cell-content-passed_sometimes {
+    background: #FCB724;
+}
+
+.v-table-cell-content-failed {
+    background: #FFFF00;
+}
+
+.v-table-cell-content-not_run {
+    background: #FFFFFF;
+}
