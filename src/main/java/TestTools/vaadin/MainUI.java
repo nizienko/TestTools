@@ -13,11 +13,8 @@ public class MainUI extends UI {
 
     @Override
     public void init(VaadinRequest request) {
-        this.setTheme("test-tools-default");
-//        this.setTheme("liferay");
-
+        this.setTheme("mytheme");
         AppLayout appLayout = new AppLayout();
         this.setContent(appLayout);
-
     }
 }

@@ -2,6 +2,7 @@ package TestTools.vaadin.gui.testresults.body;
 
 
 import TestTools.database.testexecution.TestExecution;
+import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
@@ -25,6 +26,27 @@ public class LatestTestsLayout extends VerticalLayout {
         table.addContainerProperty("Name", String.class, null);
         table.addContainerProperty("Date", String.class, null);
         table.addContainerProperty("Status", String.class, null);
+        table.setCellStyleGenerator(new Table.CellStyleGenerator() {
+            @Override
+            public String getStyle(Table source, Object itemId, Object propertyId) {
+                if(propertyId != null ) {
+                    Item item = source.getItem(itemId);
+                    String status = (String) item.getItemProperty("Status").getValue();
+                    if ("passed".equals(status)){
+                        return "passed";
+                    }
+                    else if ("failed".equals(status)){
+                        return "failed";
+                    }
+                    else {
+                        return "not_run";
+                    }
+                }
+                else {
+                    return null;
+                }
+            }
+        });
         this.addComponent(table);
     }
 
