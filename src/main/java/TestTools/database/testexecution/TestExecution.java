@@ -17,6 +17,7 @@ public class TestExecution {
     private String versionName;
     private String buildName;
     private String executionName;
+    private String comment;
 
 
     public TestExecution() {
@@ -116,5 +117,13 @@ public class TestExecution {
 
     public void setExecutionName(String executionName) {
         this.executionName = executionName;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

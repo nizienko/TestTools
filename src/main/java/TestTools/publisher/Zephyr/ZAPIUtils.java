@@ -194,6 +194,7 @@ public class ZAPIUtils {
                 "\"status\": " + status + ",\n" +
                 "\"comment\": \"" + comment + "\"\n" +
                 "}";
+        LOG.info(request);
         String result = makePut(zephyr + "execution/" + id + "/execute", request);
     }
 

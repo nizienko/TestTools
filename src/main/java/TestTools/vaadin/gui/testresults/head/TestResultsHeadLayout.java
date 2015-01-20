@@ -35,6 +35,7 @@ public class TestResultsHeadLayout extends HorizontalLayout {
     private DateField sinceDate;
     private DateField toDate;
     private CheckBox grouped;
+    private CheckBox failed;
 
     public TestResultsHeadLayout(final TestResultsBodyLayout bodyLayout) {
         this.bodyLayout = bodyLayout;
@@ -157,7 +158,21 @@ public class TestResultsHeadLayout extends HorizontalLayout {
         });
         this.addComponent(updateButton);
         grouped = new CheckBox("Group");
+        grouped.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+                showExecutions();
+            }
+        });
         this.addComponent(grouped);
+        failed = new CheckBox("Failed only");
+        failed.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+                showExecutions();
+            }
+        });
+        this.addComponent(failed);
         showExecutions();
     }
 
@@ -171,7 +186,8 @@ public class TestResultsHeadLayout extends HorizontalLayout {
                         currentBuildExecution,
                         currentTestSuite,
                         sinceDate.getValue(),
-                        toDate.getValue()));
+                        toDate.getValue(),
+                        failed.getValue()));
             } else {
                 bodyLayout.updateLatestTests(daoContainer.getTestExecutionDao().selectExecutions(
                         currentProject,
@@ -180,7 +196,8 @@ public class TestResultsHeadLayout extends HorizontalLayout {
                         currentBuildExecution,
                         currentTestSuite,
                         sinceDate.getValue(),
-                        toDate.getValue()));
+                        toDate.getValue(),
+                        failed.getValue()));
             }
         } catch (NullPointerException e) {
             Notification.show("Incorrect data", Notification.Type.ERROR_MESSAGE);

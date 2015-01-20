@@ -22,8 +22,11 @@ public class LatestTestsLayout extends VerticalLayout {
         table.setEditable(false);
         table.setSelectable(true);
         table.setImmediate(true);
+        table.addContainerProperty("", Integer.class, null);
+        table.addContainerProperty("Component", String.class, null);
         table.addContainerProperty("Issue", String.class, null);
         table.addContainerProperty("Name", String.class, null);
+        table.addContainerProperty("Comment", String.class, null);
         table.addContainerProperty("Date", String.class, null);
         table.addContainerProperty("Status", String.class, null);
         table.setCellStyleGenerator(new Table.CellStyleGenerator() {
@@ -59,12 +62,16 @@ public class LatestTestsLayout extends VerticalLayout {
                 status = "passed";
             }
             table.addItem(new Object[]{
+                    i,
+                    te.getPtojectName(),
                     te.getTestCaseIssue(),
                     te.getTestCaseName(),
+                    te.getComment(),
                     te.getExecutionDt().toString(),
                     status
             }, new Integer(i));
             i++;
         }
+        testExecutions.clear();
     }
 }

@@ -19,6 +19,7 @@ public class TestExecutionWithNamesMapper extends AbstractMapper implements RowM
         testExecution.setVersionName(resultSet.getString("version"));
         testExecution.setBuildName(resultSet.getString("build"));
         testExecution.setExecutionName(resultSet.getString("execution"));
+        testExecution.setComment(resultSet.getString("comment"));
         Date executionDt = null;
         try {
             executionDt = dateFormat.parse(resultSet.getString("dt"));

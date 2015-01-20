@@ -6,6 +6,7 @@ import TestTools.database.buildexecution.BuildExecution;
 import TestTools.database.project.Project;
 import TestTools.database.testsuite.TestSuite;
 import TestTools.database.version.Version;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Date;
@@ -15,6 +16,8 @@ import java.util.List;
  * Created by def on 03.11.14.
  */
 public class TestExecutionDao extends AbstractDao {
+    public static final Logger LOG = Logger.getLogger(TestExecutionDao.class);
+
     public TestExecutionDao(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate);
     }
@@ -26,34 +29,38 @@ public class TestExecutionDao extends AbstractDao {
                 "    \"testcase_id\" INTEGER,\n" +
                 "    \"status_id\" INTEGER,\n" +
                 "    \"buildexecution_id\" INTEGER,\n" +
-                "    \"execution_dt\" TEXT\n" +
+                "    \"execution_dt\" TEXT,\n" +
+                "    \"comment\" TEXT\n" +
+
                 ");";
         jdbcTemplate.execute(SQL);
     }
 
     public void insert(TestExecution testExecution) {
-        String SQL = "insert into testexecution (testcase_id, status_id, buildexecution_id, execution_dt) values (?, ?, ?, ?);";
-        jdbcTemplate.update(SQL,
-                testExecution.getTestCaseId(),
-                testExecution.getStatusId(),
-                testExecution.getBuildExecutionId(),
-                dateFormat.format(testExecution.getExecutionDt())
-        );
-    }
-
-    public void update(TestExecution testExecution) {
-        String SQL = "update testexecution set testcase_id=?, status_id=?, buildexecution_id=?, execution_dt=? where id=?";
+        String SQL = "insert into testexecution (testcase_id, status_id, buildexecution_id, execution_dt, comment) values (?, ?, ?, ?, ?);";
         jdbcTemplate.update(SQL,
                 testExecution.getTestCaseId(),
                 testExecution.getStatusId(),
                 testExecution.getBuildExecutionId(),
                 dateFormat.format(testExecution.getExecutionDt()),
+                testExecution.getComment()
+        );
+    }
+
+    public void update(TestExecution testExecution) {
+        String SQL = "update testexecution set testcase_id=?, status_id=?, buildexecution_id=?, execution_dt=?, comment=? where id=?";
+        jdbcTemplate.update(SQL,
+                testExecution.getTestCaseId(),
+                testExecution.getStatusId(),
+                testExecution.getBuildExecutionId(),
+                dateFormat.format(testExecution.getExecutionDt()),
+                testExecution.getComment(),
                 testExecution.getId()
         );
     }
 
     public TestExecution select(Integer id) {
-        String SQL = "select id, testcase_id, status_id, buildexecution_id, execution_dt from testexecution where id=?;";
+        String SQL = "select id, testcase_id, status_id, buildexecution_id, execution_dt, comment from testexecution where id=?;";
         return jdbcTemplate.queryForObject(SQL, new Object[]{id}, new TestExecutionMapper());
     }
 
@@ -64,10 +71,11 @@ public class TestExecutionDao extends AbstractDao {
             BuildExecution buildExecution,
             TestSuite testSuite,
             Date sinceDate,
-            Date toDate) {
+            Date toDate,
+            Boolean failedOnly) {
         boolean isFirstParameter = true;
         StringBuffer SQL = new StringBuffer();
-        SQL.append("select tc.issue issue, tc.name testcase, p.name project, v.name version, b.name build, be.name execution, te.execution_dt dt, te.status_id status \n" +
+        SQL.append("select tc.issue issue, tc.name testcase, p.name project, v.name version, b.name build, be.name execution, te.execution_dt dt, te.status_id status, te.comment comment \n" +
                 "from testexecution te join buildexecution be on te.buildexecution_id=be.id join build b on be.build_id=b.id join version v on b.version_id=v.id join project p on v.project_id=p.id join testcase tc on te.testcase_id=tc.id");
         if (project != null) {
             SQL.append(getParameterString("p.id", project.getId().toString(), isFirstParameter));
@@ -96,7 +104,11 @@ public class TestExecutionDao extends AbstractDao {
         }
         SQL.append(" te.execution_dt>='" + dateFormat.format(sinceDate) + "'");
         SQL.append(" and te.execution_dt<='" + dateFormat.format(toDate) + "'");
+        if (failedOnly) {
+            SQL.append(" and te.status_id!=5");
+        }
         SQL.append(" order by te.execution_dt desc");
+        LOG.info(SQL);
         return jdbcTemplate.query(SQL.toString(), new Object[]{}, new TestExecutionWithNamesMapper());
     }
 
@@ -107,7 +119,8 @@ public class TestExecutionDao extends AbstractDao {
             BuildExecution buildExecution,
             TestSuite testSuite,
             Date sinceDate,
-            Date toDate) {
+            Date toDate,
+            Boolean failedOnly) {
         boolean isFirstParameter = true;
         String SQL = "select tc.issue issue, tc.name name, r.passed passed, r.failed failed from testcase tc ${JOIN} \n" +
                 "(select t.testcase_id, p.passed passed, f.failed failed from \n" +
@@ -146,6 +159,10 @@ public class TestExecutionDao extends AbstractDao {
         } else {
             SQL = SQL.replace("${JOIN}", "join");
         }
+        if (failedOnly) {
+            SQL = SQL + " where r.passed is null and r.failed>0";
+        }
+        LOG.info(SQL);
         return jdbcTemplate.query(SQL, new Object[]{}, new GroupedTestExecutionMapper());
     }
 

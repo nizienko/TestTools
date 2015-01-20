@@ -184,6 +184,7 @@ public class ZAPIActions {
             issues.put(Integer.parseInt(jiraCycle.get("id")), zapiUtils.getExecutions(jiraCycle.get("name"), jiraVersion.get("label")));
             jiraIssue = getJiraIssue(test.getTestCaseIssue(), Integer.parseInt(jiraCycle.get("id")));
         }
-        zapiUtils.execute(jiraIssue.get("id"), test.getStatusId(), "Коммент");
+        zapiUtils.execute(jiraIssue.get("id"), test.getStatusId(), test.getComment());
+
     }
 }

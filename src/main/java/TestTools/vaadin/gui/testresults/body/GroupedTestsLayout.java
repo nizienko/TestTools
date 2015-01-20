@@ -24,6 +24,7 @@ public class GroupedTestsLayout extends VerticalLayout {
         table.setEditable(false);
         table.setSelectable(true);
         table.setImmediate(true);
+        table.addContainerProperty("", Integer.class, null);
         table.addContainerProperty("Issue", String.class, null);
         table.addContainerProperty("Name", String.class, null);
         table.addContainerProperty("Passed", Integer.class, null);
@@ -36,7 +37,6 @@ public class GroupedTestsLayout extends VerticalLayout {
                     Item item = source.getItem(itemId);
                     Integer passed = (Integer) item.getItemProperty("Passed").getValue();
                     Integer failed = (Integer) item.getItemProperty("Failed").getValue();
-                    LOG.info(passed + " " + failed);
                     if ((passed > 0) & failed == 0 ){
                         return "passed";
                     }
@@ -52,7 +52,6 @@ public class GroupedTestsLayout extends VerticalLayout {
                     return null;
                 }
                 else {
-                    LOG.info("Property id is null");
                     return null;
                 }
             }
@@ -65,6 +64,7 @@ public class GroupedTestsLayout extends VerticalLayout {
         int i = 1;
         for (GroupedTestExecution te : groupedTestExecutions) {
             table.addItem(new Object[]{
+                    i,
                     te.getIssue(),
                     te.getName(),
                     te.getPassed(),
@@ -72,6 +72,7 @@ public class GroupedTestsLayout extends VerticalLayout {
             }, new Integer(i));
             i++;
         }
+        groupedTestExecutions.clear();
 
     }
 }

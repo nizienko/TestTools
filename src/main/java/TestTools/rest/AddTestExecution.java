@@ -45,6 +45,12 @@ public class AddTestExecution extends RestServlet {
             te.setTestCaseIssue(parameterMap.get("issue")[0]);
             te.setTestCaseName(parameterMap.get("name")[0]);
             te.setStatusId(Integer.parseInt(parameterMap.get("status")[0]));
+            if (parameterMap.containsKey("comment")) {
+                te.setComment(parameterMap.get("comment")[0]);
+            }
+            else {
+                te.setComment("");
+            }
         } catch (NullPointerException e) {
             e.printStackTrace();
             throw new IllegalArgumentException();
