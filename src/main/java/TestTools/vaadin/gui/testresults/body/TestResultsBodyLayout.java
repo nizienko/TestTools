@@ -12,11 +12,13 @@ import java.util.List;
 public class TestResultsBodyLayout extends VerticalLayout {
     private LatestTestsLayout latestTestsLayout;
     private GroupedTestsLayout groupedTestsLayout;
+    private FailedNewLayout failedNewLayout;
     private Integer c = 1;
 
     public TestResultsBodyLayout() {
         latestTestsLayout = new LatestTestsLayout();
         groupedTestsLayout = new GroupedTestsLayout();
+        failedNewLayout = new FailedNewLayout();
         this.addComponent(latestTestsLayout);
     }
 
@@ -36,5 +38,14 @@ public class TestResultsBodyLayout extends VerticalLayout {
             c = 2;
         }
         groupedTestsLayout.updateTests(testExecutions);
+    }
+
+    public void updateFailedNewTests(List<TestExecution> testExecutions) {
+        if (c != 3) {
+            this.removeAllComponents();
+            this.addComponent(failedNewLayout);
+            c = 3;
+        }
+        failedNewLayout.updateLatestTests(testExecutions);
     }
 }

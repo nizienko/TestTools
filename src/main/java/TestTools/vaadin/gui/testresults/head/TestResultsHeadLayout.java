@@ -36,6 +36,8 @@ public class TestResultsHeadLayout extends HorizontalLayout {
     private DateField toDate;
     private CheckBox grouped;
     private CheckBox failed;
+    private CheckBox failedNew;
+
 
     public TestResultsHeadLayout(final TestResultsBodyLayout bodyLayout) {
         this.bodyLayout = bodyLayout;
@@ -173,12 +175,31 @@ public class TestResultsHeadLayout extends HorizontalLayout {
             }
         });
         this.addComponent(failed);
+        failedNew = new CheckBox("Passed -> Failed");
+        failedNew.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
+                showExecutions();
+            }
+        });
+        this.addComponent(failedNew);
         showExecutions();
     }
 
     private void showExecutions() {
         try {
-            if (grouped.getValue()) {
+            if (failedNew.getValue()) {
+                bodyLayout.updateFailedNewTests(daoContainer.getTestExecutionDao().selectExecutions(
+                        currentProject,
+                        currentVersion,
+                        currentBuild,
+                        currentBuildExecution,
+                        currentTestSuite,
+                        sinceDate.getValue(),
+                        toDate.getValue(),
+                        failed.getValue()));
+            }
+            else if (grouped.getValue()) {
                 bodyLayout.updateGroupedTests(daoContainer.getTestExecutionDao().selectGroupedExecutions(
                         currentProject,
                         currentVersion,
@@ -200,6 +221,7 @@ public class TestResultsHeadLayout extends HorizontalLayout {
                         failed.getValue()));
             }
         } catch (NullPointerException e) {
+            e.printStackTrace();
             Notification.show("Incorrect data", Notification.Type.ERROR_MESSAGE);
         }
     }
