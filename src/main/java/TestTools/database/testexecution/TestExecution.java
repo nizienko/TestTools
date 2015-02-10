@@ -1,5 +1,6 @@
 package TestTools.database.testexecution;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -18,6 +19,7 @@ public class TestExecution {
     private String buildName;
     private String executionName;
     private String comment;
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:SS dd-MM");
 
 
     public TestExecution() {
@@ -29,6 +31,22 @@ public class TestExecution {
         this.statusId = statusId;
         this.buildExecutionId = buildExecutionId;
         this.executionDt = new Date();
+    }
+
+    @Override
+    public String toString(){
+        if (executionDt != null) {
+            if ("Ad hoc".equals(buildName)) {
+                return DATE_FORMAT.format(executionDt) + "(" + versionName + ")";
+            }
+            else {
+                return DATE_FORMAT.format(executionDt) + "(" + versionName + "-" + buildName + ")";
+            }
+        }
+        else {
+            return "-";
+        }
+
     }
 
     public Integer getBuildExecutionId() {

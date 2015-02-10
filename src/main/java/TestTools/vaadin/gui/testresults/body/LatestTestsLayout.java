@@ -63,7 +63,7 @@ public class LatestTestsLayout extends VerticalLayout {
             }
             table.addItem(new Object[]{
                     i,
-                    te.getPtojectName(),
+                    te.getPtojectName() + "-" + te.getVersionName(),
                     te.getTestCaseIssue(),
                     te.getTestCaseName(),
                     te.getComment(),

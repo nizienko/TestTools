@@ -19,7 +19,7 @@ public class ZAPIActions {
     private String projectKey;
     private ArrayList<HashMap<String, String>> products;
     private HashMap<String, ArrayList<HashMap<String, String>>> cylces; // key is product name
-    private HashMap<Integer, ArrayList<HashMap<String, String>>> issues; // key is cycleId
+    private HashMap<String, ArrayList<HashMap<String, String>>> issues; // key is cycleId
     public ZAPIActions(TestManager testManager){
         try {
             project = testManager.getSetting("jira.project");
@@ -29,7 +29,7 @@ public class ZAPIActions {
             this.products = zapiUtils.getVersions(project);
             LOG.info(products);
             cylces = new HashMap<String, ArrayList<HashMap<String, String>>>();
-            issues = new HashMap<Integer, ArrayList<HashMap<String, String>>>();
+            issues = new HashMap<String, ArrayList<HashMap<String, String>>>();
         }
         catch (Exception e){
             LOG.error(e.getMessage());
@@ -79,11 +79,11 @@ public class ZAPIActions {
         return isExist;
     }
 
-    private boolean isIssueExist(String issue, Integer cycleId){
+    private boolean isIssueExist(String issue, String cycleKey){
         boolean isExist = false;
         LOG.info("is exist " + issue);
         try {
-            for (HashMap<String, String> i : issues.get(cycleId)) {
+            for (HashMap<String, String> i : issues.get(cycleKey)) {
                 if (i.get("issueKey").equals(issue)) {
                     isExist = true;
                 }
@@ -113,8 +113,8 @@ public class ZAPIActions {
         return null;
     }
 
-    private HashMap<String, String> getJiraIssue(String issue, Integer cycleId){
-        for (HashMap<String, String> i : issues.get(cycleId)) {
+    private HashMap<String, String> getJiraIssue(String issue, String cycleKey){
+        for (HashMap<String, String> i : issues.get(cycleKey)) {
             if (i.get("issueKey").equals(issue)) {
                 return i;
             }
@@ -170,19 +170,19 @@ public class ZAPIActions {
             jiraCycle = getJiraCycle(product, cycle);
             LOG.info("Checked that cycle exist: " + jiraCycle);
         }
-        if (!issues.containsKey(Integer.parseInt(jiraCycle.get("id")))){
+        if (!issues.containsKey(jiraVersion.get("value") + "_" + jiraCycle.get("id"))){
             LOG.info("Issue list not found of cycle " + cycle.getName());
-            issues.put(Integer.parseInt(jiraCycle.get("id")), zapiUtils.getExecutions(jiraCycle.get("name"), jiraVersion.get("label")));
+            issues.put(jiraVersion.get("value") + "_" + jiraCycle.get("id"), zapiUtils.getExecutions(jiraCycle.get("name"), jiraVersion.get("label")));
         }
         HashMap<String, String> jiraIssue;
-        if (isIssueExist(test.getTestCaseIssue(), Integer.parseInt(jiraCycle.get("id")))){
-            jiraIssue = getJiraIssue(test.getTestCaseIssue(), Integer.parseInt(jiraCycle.get("id")));
+        if (isIssueExist(test.getTestCaseIssue(), jiraVersion.get("value") + "_" + jiraCycle.get("id"))){
+            jiraIssue = getJiraIssue(test.getTestCaseIssue(), jiraVersion.get("value") + "_" + jiraCycle.get("id"));
         }
         else {
             zapiUtils.addTestsToCycle(test.getTestCaseIssue(), jiraVersion.get("value"), jiraCycle.get("id"), project);
-            issues.remove(Integer.parseInt(jiraCycle.get("id")));
-            issues.put(Integer.parseInt(jiraCycle.get("id")), zapiUtils.getExecutions(jiraCycle.get("name"), jiraVersion.get("label")));
-            jiraIssue = getJiraIssue(test.getTestCaseIssue(), Integer.parseInt(jiraCycle.get("id")));
+            issues.remove(jiraVersion.get("value") + "_" + jiraCycle.get("id"));
+            issues.put(jiraVersion.get("value") + "_" + jiraCycle.get("id"), zapiUtils.getExecutions(jiraCycle.get("name"), jiraVersion.get("label")));
+            jiraIssue = getJiraIssue(test.getTestCaseIssue(), jiraVersion.get("value") + "_" + jiraCycle.get("id"));
         }
         zapiUtils.execute(jiraIssue.get("id"), test.getStatusId(), test.getComment());
 

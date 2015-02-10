@@ -175,7 +175,7 @@ public class TestResultsHeadLayout extends HorizontalLayout {
             }
         });
         this.addComponent(failed);
-        failedNew = new CheckBox("Passed -> Failed");
+        failedNew = new CheckBox("Diff");
         failedNew.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
@@ -187,6 +187,7 @@ public class TestResultsHeadLayout extends HorizontalLayout {
     }
 
     private void showExecutions() {
+
         try {
             if (failedNew.getValue()) {
                 bodyLayout.updateFailedNewTests(daoContainer.getTestExecutionDao().selectExecutions(
@@ -197,7 +198,7 @@ public class TestResultsHeadLayout extends HorizontalLayout {
                         currentTestSuite,
                         sinceDate.getValue(),
                         toDate.getValue(),
-                        failed.getValue()));
+                        false));
             }
             else if (grouped.getValue()) {
                 bodyLayout.updateGroupedTests(daoContainer.getTestExecutionDao().selectGroupedExecutions(

@@ -1,5 +1,6 @@
 package TestTools.vaadin.gui.testresults.body;
 
+import TestTools.database.systemsettings.SystemSettingsDao;
 import TestTools.database.testexecution.TestExecution;
 import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
@@ -27,26 +28,65 @@ public class FailedNewLayout extends VerticalLayout {
         table.addContainerProperty("", Integer.class, null);
         table.addContainerProperty("Issue", String.class, null);
         table.addContainerProperty("Name", String.class, null);
-        table.addContainerProperty("Last", String.class, null);
-        table.addContainerProperty("Previous", String.class, null);
+        table.addContainerProperty("Last", TestExecution.class, null);
+        table.addContainerProperty("Previous", TestExecution.class, null);
         table.setCellStyleGenerator(new Table.CellStyleGenerator() {
             @Override
             public String getStyle(Table source, Object itemId, Object propertyId) {
                 if(propertyId != null ) {
+                    String col = (String)propertyId;
                     Item item = source.getItem(itemId);
-                    String status = (String) item.getItemProperty("Status").getValue();
-                    if ("passed".equals(status)){
-                        return "passed";
+
+                    if ("Issue".equals(col)) {
+                        TestExecution last = (TestExecution) item.getItemProperty("Last").getValue();
+                        TestExecution previous = (TestExecution) item.getItemProperty("Previous").getValue();
+
+                        if ((previous == null) || (previous.getStatusId() == null)) {
+                            return "not_run";
+                        }
+                        else if ((last.getStatusId() == 5) && (previous.getStatusId() == 6)){
+                            return "passed";
+                        }
+                        else if ((last.getStatusId() == 5) && (previous.getStatusId() == 5)){
+                            return "passed_sometimes";
+                        }
+                        else if ((last.getStatusId() == 6) && (previous.getStatusId() == 5)){
+                            return "failed";
+                        }
+                        else if ((last.getStatusId() == 6) && (previous.getStatusId() == 6)){
+                            return "passed_sometimes";
+                        }
+                        else {
+                            return "not_run";
+                        }
                     }
-                    else if ("failed".equals(status)){
-                        return "failed";
+                    else if ("Last".equals(col)) {
+                        TestExecution last = (TestExecution) item.getItemProperty("Last").getValue();
+                        if (last.getStatusId() == 5) {
+                            return "passed";
+                        }
+                        else {
+                            return "failed";
+                        }
+                    }
+                    else if ("Previous".equals(col)) {
+                        TestExecution previous = (TestExecution) item.getItemProperty("Previous").getValue();
+                        if ((previous == null) || (previous.getStatusId() == null)) {
+                            return "not_run";
+                        }
+                        else if (previous.getStatusId() == 5) {
+                            return "passed";
+                        }
+                        else {
+                            return "failed";
+                        }
                     }
                     else {
                         return "not_run";
                     }
                 }
                 else {
-                    return null;
+                    return "not_run";
                 }
             }
         });
@@ -94,8 +134,8 @@ public class FailedNewLayout extends VerticalLayout {
                     i,
                     pairs.getKey(),
                     last.getTestCaseName(),
-                    last.getStatusId() + " " + last.getExecutionDt(),
-                    previous.getStatusId() + " " + previous.getExecutionDt()
+                    last,
+                    previous
             }, new Integer(i));
             i++;
         }

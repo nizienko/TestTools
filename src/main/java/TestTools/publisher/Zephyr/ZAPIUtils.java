@@ -106,7 +106,7 @@ public class ZAPIUtils {
     }
 
     public String createCycle(String project, String version, String name, String versionName) {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yy");
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yy");
         Date now = new Date();
         Date tommorow = new Date(now.getTime() + (1000 * 60 * 60 * 24));
 
