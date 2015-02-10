@@ -46,6 +46,10 @@ public class TestResultsHeadLayout extends HorizontalLayout {
         this.addComponent(projectSelect);
         for (Project project : daoContainer.getProjectDao().selectAll()) {
             projectSelect.addItem(project);
+            if (currentProject == null){
+                projectSelect.select(project);
+                currentProject = project;
+            }
         }
         testSuiteSelect = new MySelect();
         testSuiteSelect.addValueChangeListener(new Property.ValueChangeListener() {

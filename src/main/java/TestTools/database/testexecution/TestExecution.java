@@ -19,7 +19,7 @@ public class TestExecution {
     private String buildName;
     private String executionName;
     private String comment;
-    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:SS dd-MM");
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("YYYY-MM-dd HH:mm:SS");
 
 
     public TestExecution() {

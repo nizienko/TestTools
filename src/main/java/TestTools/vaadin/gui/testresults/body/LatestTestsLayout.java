@@ -6,6 +6,7 @@ import com.vaadin.data.Item;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public class LatestTestsLayout extends VerticalLayout {
     private Table table;
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("YYYY-MM-dd HH:mm:SS");
 
     public LatestTestsLayout() {
         this.setSizeFull();
@@ -67,7 +69,7 @@ public class LatestTestsLayout extends VerticalLayout {
                     te.getTestCaseIssue(),
                     te.getTestCaseName(),
                     te.getComment(),
-                    te.getExecutionDt().toString(),
+                    DATE_FORMAT.format(te.getExecutionDt()),
                     status
             }, new Integer(i));
             i++;
