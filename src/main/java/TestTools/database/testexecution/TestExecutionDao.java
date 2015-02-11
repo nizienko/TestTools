@@ -108,7 +108,6 @@ public class TestExecutionDao extends AbstractDao {
             SQL.append(" and te.status_id!=5");
         }
         SQL.append(" order by te.execution_dt desc");
-        LOG.info(SQL);
         return jdbcTemplate.query(SQL.toString(), new Object[]{}, new TestExecutionWithNamesMapper());
     }
 
@@ -162,7 +161,6 @@ public class TestExecutionDao extends AbstractDao {
         if (failedOnly) {
             SQL = SQL + " where r.passed is null and r.failed>0";
         }
-        LOG.info(SQL);
         return jdbcTemplate.query(SQL, new Object[]{}, new GroupedTestExecutionMapper());
     }
 

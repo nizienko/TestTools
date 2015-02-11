@@ -18,7 +18,9 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        LOG.info("Ttools stoped");
-        MainApp.stop();
+        if (MainApp.isRunning()) {
+            LOG.info("Ttools stoped");
+            MainApp.stop();
+        }
     }
 }

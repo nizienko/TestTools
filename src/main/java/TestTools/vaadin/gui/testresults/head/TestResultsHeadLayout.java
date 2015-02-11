@@ -66,6 +66,11 @@ public class TestResultsHeadLayout extends HorizontalLayout {
 
         versionSelect = new MySelect();
         this.addComponent(versionSelect);
+        if (currentProject != null) {
+            for (Version version : daoContainer.getVersionDao().selectByProject(currentProject)) {
+                versionSelect.addItem(version);
+            }
+        }
 
         buildSelect = new MySelect();
         this.addComponent(buildSelect);

@@ -12,13 +12,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class MainApp {
     private static ApplicationContext ctx = null;
-
+    private static boolean running;
     private MainApp() {
 
     }
 
     public synchronized static ApplicationContext getCtx() {
         if (ctx == null) {
+            running = true;
             ctx = new ClassPathXmlApplicationContext("Beans.xml");
             init();
         }
@@ -28,6 +29,7 @@ public class MainApp {
     public synchronized static void stop(){
         TestManager testManager = (TestManager) ctx.getBean("testManager");
         testManager.stop();
+        running = false;
         ((ConfigurableApplicationContext) ctx).close();
     }
 
@@ -46,5 +48,9 @@ public class MainApp {
 
         // Starting zephyr publisher
         new Thread((ZephyrPublisher) ctx.getBean("publisher")).start();
+    }
+
+    public static boolean isRunning() {
+        return running;
     }
 }

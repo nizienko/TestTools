@@ -1,5 +1,6 @@
 package TestTools.vaadin.gui;
 
+import TestTools.core.MainApp;
 import TestTools.database.user.User;
 import TestTools.vaadin.gui.sqlmanager.SQLManager;
 import TestTools.vaadin.gui.testcases.TestCasesLayout;
@@ -58,6 +59,12 @@ public class MainMenu extends MenuBar {
                 Notification.show("Login", Notification.Type.TRAY_NOTIFICATION);
             }
         };
+        MenuBar.Command stop = new Command() {
+            public void menuSelected(MenuItem menuItem) {
+                MainApp.stop();
+                Notification.show("Stopped", Notification.Type.TRAY_NOTIFICATION);
+            }
+        };
         MenuBar.Command changePassword = new Command() {
             public void menuSelected(MenuItem menuItem) {
                 UI.getCurrent().addWindow(new ChangePasswordWindow(appLayout.getUser()));
@@ -90,7 +97,7 @@ public class MainMenu extends MenuBar {
             if (appLayout.getUser().getUserLevel() > 9){
                 manage.addItem("Users", manageUsers);
                 manage.addItem("SQL Manager", sqlManager);
-
+                manage.addItem("Stop application", stop);
             }
             MenuItem profile = main.addItem(appLayout.getUser().getLogin(), null, null);
             profile.addItem("Change password", changePassword);
